@@ -30,7 +30,8 @@ export class CacheManager {
         }
 
         // populate the last updated
-        this.getLastUpdated();
+        // DEBUG: UNCOMMENT THIS
+        // this.getLastUpdated();
     }
 
     /* Gets data from the localStorage if its upto date, otherwise returns null */
@@ -75,32 +76,112 @@ export class CacheManager {
         if (!timestamp) {
             // wasnt in object storage
             timestamp = await API.lastUpdated.get();
+            if (!timestamp) {
+                throw new Error("getLastUpdated: API Error.")
+            }
             this.storage.lastUpdated = timestamp;
         }
         return timestamp;
     }
 
+    // TODO: Handle errors in these
+    /* Metadata getters */
+
     /* Returns a list of uuids. */
     async getUUIDs(): Promise<uuid[]> {
-        let uuids = this.storage.UUIDList;
-        if (uuids) {
+        let objectData = this.storage.UUIDList;
+        if (objectData) {
             // was on the object, return
-            console.log("uuids was on object");
-            return uuids;
+            return objectData;
         }
 
-        // check local storage first
+        // check local storage
         const localData = await this.getLocalStorage("UUIDList");
         if (localData) {
-            console.log("uuids was in localstorage");
             return localData;
         }
 
         // no entry in localstorage, or was not upto date, query the api
-        uuids = await API.UUIDList.get();
-        this.storage.UUIDList = uuids;
-        this.putLocalStorage("UUIDList", uuids);
-        console.log("fetched uuids");
-        return uuids;
+        const APIData = await API.UUIDList.get();
+        if (!APIData) {
+            throw new Error("getUUIDs: API Error.")
+        }
+        this.storage.UUIDList = APIData;
+        await this.putLocalStorage("UUIDList", APIData);
+        return APIData;
+    }
+
+    /* Real data getters, all of these effectively function the same */
+
+    /* Returns the advancement data for a user. */
+    async getAdvancements(uuid: uuid): Promise<advancementsData> {
+        const objectData = this.storage.advancements.get(uuid);
+        if (objectData) {
+            // was on the object, return
+            return objectData;
+        }
+
+        // check local storage since it wasnt on the object
+        const localData = await this.getLocalStorage(`advancements:${uuid}`);
+        if (localData) {
+            return localData;
+        }
+
+        // not in local storage or was not up to date
+        const APIData = await API.advancements.get(uuid);
+        if (!APIData) {
+            throw new Error("getAdvancements: API Error.")
+        }
+        this.storage.advancements.set(uuid, APIData);
+        await this.putLocalStorage(`advancements:${uuid}`, APIData);
+        return APIData;
+    }
+
+    /* Returns the player data for a user. */
+    async getPlayer(uuid: uuid): Promise<playerData> {
+        const objectData = this.storage.players.get(uuid);
+        if (objectData) {
+            // was on the object, return
+            return objectData;
+        }
+
+        // check local storage since it wasnt on the object
+        const localData = await this.getLocalStorage(`player:${uuid}`);
+        if (localData) {
+            return localData;
+        }
+
+        // not in local storage or was not up to date
+        const APIData = await API.player.get(uuid);
+        if (!APIData) {
+            throw new Error("getPlayer: API Error.")
+        }
+        this.storage.players.set(uuid, APIData);
+        await this.putLocalStorage(`player:${uuid}`, APIData);
+        return APIData;
+    }
+
+    /* Returns the stats data for a user. */
+    async getStats(uuid: uuid): Promise<statsData> {
+        const objectData = this.storage.stats.get(uuid);
+        if (objectData) {
+            // was on the object, return
+            return objectData;
+        }
+
+        // check local storage since it wasnt on the object
+        const localData = await this.getLocalStorage(`stats:${uuid}`);
+        if (localData) {
+            return localData;
+        }
+
+        // not in local storage or was not up to date
+        const APIData = await API.stats.get(uuid);
+        if (!APIData) {
+            throw new Error("getStats: API Error.")
+        }
+        this.storage.stats.set(uuid, APIData);
+        await this.putLocalStorage(`stats:${uuid}`, APIData);
+        return APIData;
     }
 }

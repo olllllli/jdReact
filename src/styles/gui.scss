@@ -1,0 +1,26 @@
+.MCToast {
+    display: block;
+    padding: calc(var(--pixel-size) * 6);
+
+    border-style: solid;
+    border-image: url("../img/gui/border_toast.png") 4 fill;
+    border-width: calc(var(--pixel-size) * 4);
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+
+    h2 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    img {
+        object-fit: contain;
+        width: 4rem;
+        height: 4rem;
+    }
+}

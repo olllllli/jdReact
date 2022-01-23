@@ -1,13 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { RecoilRoot, useRecoilState } from 'recoil';
+import { RecoilRoot } from 'recoil';
+import { BrowserRouter } from 'react-router-dom';
+
+import "styles/gui.scss";
+import "styles/global.scss";
+import "styles/index.scss";
+import { CacheManager } from 'lib/CacheManager';
+
+export const cache = new CacheManager();
 
 ReactDOM.render(
     <React.StrictMode>
-        <RecoilRoot>
-            <App />
-        </RecoilRoot>
+        <BrowserRouter>
+            <RecoilRoot>
+                <App />
+            </RecoilRoot>
+        </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
 );
