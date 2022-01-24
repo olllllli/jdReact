@@ -13,7 +13,7 @@ const PlayersPage: FunctionComponent<{}> = () => {
             <header className="SubpageHeader">
                 <Link to="/" className="MCBack" />
                 <MCToast>
-                    <img src={totem} /><h2>Players</h2>
+                    <img src={totem} alt="Totem Icon" /><h2>Players</h2>
                 </MCToast>
             </header>
             <main>

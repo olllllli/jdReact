@@ -1,0 +1,31 @@
+.MCAdvancement {
+    padding: 20px;
+    box-sizing: border-box;
+
+    background-repeat: no-repeat;
+    background-size: 100%;
+
+    &.normal {
+        background-image: url("/img/gui/advancement_normal.png");
+
+        &.done {
+            background-image: url("/img/gui/advancement_normal_done.png");
+        }
+    }
+
+    &.goal {
+        background-image: url("/img/gui/advancement_goal.png");
+
+        &.done {
+            background-image: url("/img/gui/advancement_goal_done.png");
+        }
+    }
+
+    &.challenge {
+        background-image: url("/img/gui/advancement_challenge.png");
+
+        &.done {
+            background-image: url("/img/gui/advancement_challenge_done.png");
+        }
+    }
+}

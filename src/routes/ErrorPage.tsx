@@ -13,7 +13,7 @@ const ErrorPage: FunctionComponent<{}> = () => {
             <header className="SubpageHeader">
                 <Link to="/" className="MCBack" />
                 <MCToast>
-                    <img src={barrier} /><h2>Error 404: Nothing Here ._.</h2>
+                    <img src={barrier} alt="Barrier Icon" /><h2>Error 404: Nothing Here ._.</h2>
                 </MCToast>
             </header>
             <main>

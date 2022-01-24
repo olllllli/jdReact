@@ -70,3 +70,11 @@ type localStorageValue<KeyType> = {
     lastUpdated: timestampFull,
     data: localStorageData<KeyType>
 }
+
+/**
+ * TYPES RELEVANT TO THE REACT COMPONENTS
+ */
+
+/* Advancements */
+type advCategory = "story" | "nether" | "end" | "adventure" | "husbandry";
+type advType = "normal" | "goal" | "challenge";

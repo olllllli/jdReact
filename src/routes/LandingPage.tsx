@@ -17,13 +17,13 @@ const LandingPage: FunctionComponent<{}> = () => {
             <main>
                 <nav>
                     <MCToast type="link" to="advancements">
-                        <img src={knowledge_book} /><h2>Advancements</h2>
+                        <img src={knowledge_book} alt="Knowledge Book Icon" /><h2>Advancements</h2>
                     </MCToast>
                     <MCToast type="link" to="players">
-                        <img src={totem} /><h2>Players</h2>
+                        <img src={totem} alt="Totem Icon" /><h2>Players</h2>
                     </MCToast>
                     <MCToast type="link" to="stats">
-                        <img src={written_book} /><h2>Statistics</h2>
+                        <img src={written_book} alt="Written Book Icon" /><h2>Statistics</h2>
                     </MCToast>
                 </nav>
             </main>
