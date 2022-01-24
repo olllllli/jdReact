@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import "styles/routes/common.scss";
 import "styles/gui.scss";
 import knowledge_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/knowledge_book.png";
+import MCItem from "components/MCItem";
 
 
 const AdvPage: FunctionComponent<{}> = () => {
