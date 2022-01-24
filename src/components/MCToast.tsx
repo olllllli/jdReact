@@ -1,5 +1,6 @@
 import { FunctionComponent, ReactElement } from "react";
 import { Link } from "react-router-dom";
+import "styles/components/MCToast.scss"
 
 type MCToastProps = {
     type: "link",
