@@ -7,46 +7,50 @@ type timestampBasic = string;
 type timestampFull = string;
 
 /* Response data types */
-type advancementsData = { DataVersion: number } | {
-    [namespace: string]: {
-        criteria: {
-            [criterion: string]: timestampBasic
-        },
-        done: boolean
-    }
-}
+type advancementsData =
+    | { DataVersion: number; }
+    | {
+        [namespace: string]: {
+            criteria: {
+                [criterion: string]: timestampBasic;
+            };
+            done: boolean;
+        };
+    };
 
 type playerData = {
-    advancementCount: number | string,
-    offline: boolean,
-    skin: string, // A URL
-    username: string,
-}
+    advancementCount: number | string;
+    offline: boolean;
+    skin: string; // A URL
+    username: string;
+};
 
 type statsNamespaces = `minecraft:${"broken" | "crafted" | "custom" | "dropped" | "killed" | "killed_by" | "mined" | "picked_up" | "used"}`;
-type statsData = { DataVersion: number } | {
-    [namespace in statsNamespaces]: {
-        [stat: string]: number
-    }
-}
+type statsData =
+    | { DataVersion: number; }
+    | {
+        [namespace in statsNamespaces]: {
+            [stat: string]: number;
+        };
+    };
 
 /* endpoint interfaces */
 interface metaEndpoint<R> {
-    get(): Promise<R>
+    get(): Promise<R>;
 }
 
 interface dataEndpoint<R> {
-    get(uuid: string): Promise<R>
+    get(uuid: string): Promise<R>;
 }
 
 /* types for the cache manager */
 type CacheManagerStorage = {
-    lastUpdated: string | null,
-    UUIDList: uuid[] | null,
-    advancements: Map<uuid, advancementsData>,
-    players: Map<uuid, playerData>,
-    stats: Map<uuid, statsData>
-}
+    lastUpdated: string | null;
+    UUIDList: uuid[] | null;
+    advancements: Map<uuid, advancementsData>;
+    players: Map<uuid, playerData>;
+    stats: Map<uuid, statsData>;
+};
 
 // TODO: Potentially use this less complicated form that raises errors and just use `as`
 // type localStorageKeyType = "UUIDList" | "advancements" | "player" | "stats";
@@ -57,24 +61,42 @@ type CacheManagerStorage = {
 // }
 
 // NOTE: All this is saying is it determines the data type based on the type of the key (category of the data)
-type localStorageData<T> =
-    T extends "UUIDList" ? uuid[] :
-    T extends `advancements:${uuid}` ? advancementsData :
-    T extends `player:${uuid}` ? playerData :
-    T extends `stats:${uuid}` ? statsData :
-    never;
+type localStorageData<T> = T extends "UUIDList" ? uuid[] : T extends `advancements:${uuid}` ? advancementsData : T extends `player:${uuid}` ? playerData : T extends `stats:${uuid}` ? statsData : never;
 
 type localStorageKey = "UUIDList" | `advancements:${uuid}` | `player:${uuid}` | `stats:${uuid}`;
 
 type localStorageValue<KeyType> = {
-    lastUpdated: timestampFull,
-    data: localStorageData<KeyType>
-}
+    lastUpdated: timestampFull;
+    data: localStorageData<KeyType>;
+};
 
 /**
  * TYPES RELEVANT TO THE REACT COMPONENTS
  */
 
 /* Advancements */
-type advCategory = "story" | "nether" | "end" | "adventure" | "husbandry";
-type advType = "normal" | "goal" | "challenge";
+type AdvCategory = "story" | "nether" | "end" | "adventure" | "husbandry";
+type AdvType = "normal" | "goal" | "challenge";
+
+type AdvancementDetailsType = {
+    [category in AdvCategory]: {
+        [name: string]: {
+            title: string;
+            desc: string;
+            icon: { type: "item" | "block"; name: string; ench: boolean; };
+            type: AdvType;
+            criteria: string[];
+        };
+    };
+};
+
+type AdvancementLayoutType = {
+    [category in AdvCategory]: {
+        [name: string]: {
+            row: number;
+            col: number;
+            children: string[];
+        };
+    };
+};
+

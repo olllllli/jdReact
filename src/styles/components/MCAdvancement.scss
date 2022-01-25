@@ -1,5 +1,6 @@
 .MCAdvancement {
-    padding: 20px;
+    // TODO: figure out how to base this off given width
+    padding: calc(5 * var(--pixel-size));
     box-sizing: border-box;
 
     background-repeat: no-repeat;
