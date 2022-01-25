@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "styles/routes/common.scss";
 import "styles/gui.scss";
 import knowledge_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/knowledge_book.png";
-import MCAdvancement from "components/MCAdvancement";
+import MCAdvView from "components/MCAdvView";
 
 // TODO: Actually do this
 const AdvPage: FunctionComponent<{}> = () => {
@@ -18,17 +18,10 @@ const AdvPage: FunctionComponent<{}> = () => {
                 </MCToast>
             </header>
             <main>
-                {/* 4 x 26 = 104 */}
-                <MCAdvancement category="story" name="root" style={{ height: 104, width: 104 }} />
-                <MCAdvancement category="custom" type="normal" style={{ height: 104, width: 104 }} />
-                <MCAdvancement category="custom" type="normal" done={true} style={{ height: 104, width: 104 }} />
-                <MCAdvancement category="custom" type="goal" style={{ height: 104, width: 104 }} />
-                <MCAdvancement category="custom" type="goal" done={true} style={{ height: 104, width: 104 }} />
-                <MCAdvancement category="custom" type="challenge" style={{ height: 104, width: 104 }} />
-                <MCAdvancement category="custom" type="challenge" done={true} style={{ height: 104, width: 104 }} />
+                <MCAdvView category="end" />
             </main>
         </>
     );
-}
+};
 
 export default AdvPage;

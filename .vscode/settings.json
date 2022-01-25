@@ -1,0 +1,4 @@
+{
+    "prettier.documentSelectors": ["**/*.tsx"],
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
