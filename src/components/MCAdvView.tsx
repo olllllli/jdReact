@@ -1,6 +1,7 @@
+import { cache } from "index";
 import { PIXELSIZE } from "lib/globalConstants";
 import { advancementLayouts, layoutSizes } from "lib/MCAdvLayouts";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 
 import "styles/components/MCAdvView.scss";
 import MCAdvancement from "./MCAdvancement";
@@ -33,12 +34,31 @@ function posToLine(parentPos: pos, childPos: pos, color: "white" | "black", key?
 
 
 interface MCAdvViewProps {
-    category: AdvCategory;
+    category: AdvCategory;  // The category of the advancements
+    user?: uuid;            // The uuid of the user
 }
 
 /* A display of advancements, organises and displays category of advancements */
-// TODO: Add the background and the svg
 const MCAdvView: FunctionComponent<MCAdvViewProps> = (props) => {
+    /* Getting the data if the user was given */
+    /* The component will render first without the user data, and once data has been retrieved, state will change */
+    // NOTE: Could swap to a blocking model, or move this to the container instead to allow for select blocking
+    const [userData, setUserData] = useState<advancementsData>({ DataVersion: -1 }); // TODO: I also think this is probs bad
+    useEffect(() => {
+        async function getUserData(user: uuid) {
+            console.log("get user data");
+            const data = await cache.getAdvancements(user);
+            setUserData(data); // TODO: I think this is really bad because of unknown return type when fail since unimplementations
+        }
+
+        // call the getUserData function now if a user was given
+        if (props.user) {
+            getUserData(props.user);
+        }
+    }, [props.user]);
+
+
+    /* Rendering the component */
     // Get all the children components and generate the svg
     const advancements = [];
     const blackLines = [];
@@ -47,9 +67,14 @@ const MCAdvView: FunctionComponent<MCAdvViewProps> = (props) => {
         // get its position and work out the grid area it takes up
         const pos = advancementLayouts[props.category][advName];
         const gridArea = `${pos.row} / ${pos.col} / ${pos.row + 2} / ${pos.col + 2}`;
+
+        // check whether the advancement is completed
+        const advNamespace: advancementNamespace = `minecraft:${props.category}/${advName}`;
+        const advDone = userData[advNamespace] ? userData[advNamespace].done : false;
+
         // add the advancement
         advancements.push(
-            <MCAdvancement category={props.category} name={advName} style={{ gridArea: gridArea }} key={advName} />
+            <MCAdvancement category={props.category} name={advName} style={{ gridArea: gridArea }} key={advName} done={advDone} />
         );
 
         // generate the lines from the advancement to its children
@@ -82,8 +107,6 @@ const MCAdvView: FunctionComponent<MCAdvViewProps> = (props) => {
                 </div>
                 {advancements}
             </div>
-
-
         </div>
     );
 };

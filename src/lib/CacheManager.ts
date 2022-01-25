@@ -27,7 +27,7 @@ export class CacheManager {
             advancements: new Map<uuid, advancementsData>(),
             players: new Map<uuid, playerData>(),
             stats: new Map<uuid, statsData>()
-        }
+        };
 
         // populate the last updated
         // DEBUG: UNCOMMENT THIS
@@ -64,7 +64,7 @@ export class CacheManager {
         const dataToBeStored: localStorageValue<K> = {
             lastUpdated: timestamp,
             data: data
-        }
+        };
 
         // store the data
         window.localStorage.setItem(key, JSON.stringify(dataToBeStored));
@@ -77,7 +77,7 @@ export class CacheManager {
             // wasnt in object storage
             timestamp = await API.lastUpdated.get();
             if (!timestamp) {
-                throw new Error("getLastUpdated: API Error.")
+                throw new Error("getLastUpdated: API Error.");
             }
             this.storage.lastUpdated = timestamp;
         }
@@ -104,7 +104,7 @@ export class CacheManager {
         // no entry in localstorage, or was not upto date, query the api
         const APIData = await API.UUIDList.get();
         if (!APIData) {
-            throw new Error("getUUIDs: API Error.")
+            throw new Error("getUUIDs: API Error.");
         }
         this.storage.UUIDList = APIData;
         await this.putLocalStorage("UUIDList", APIData);
@@ -130,7 +130,7 @@ export class CacheManager {
         // not in local storage or was not up to date
         const APIData = await API.advancements.get(uuid);
         if (!APIData) {
-            throw new Error("getAdvancements: API Error.")
+            throw new Error("getAdvancements: API Error.");
         }
         this.storage.advancements.set(uuid, APIData);
         await this.putLocalStorage(`advancements:${uuid}`, APIData);
@@ -154,7 +154,7 @@ export class CacheManager {
         // not in local storage or was not up to date
         const APIData = await API.player.get(uuid);
         if (!APIData) {
-            throw new Error("getPlayer: API Error.")
+            throw new Error("getPlayer: API Error.");
         }
         this.storage.players.set(uuid, APIData);
         await this.putLocalStorage(`player:${uuid}`, APIData);
@@ -178,7 +178,7 @@ export class CacheManager {
         // not in local storage or was not up to date
         const APIData = await API.stats.get(uuid);
         if (!APIData) {
-            throw new Error("getStats: API Error.")
+            throw new Error("getStats: API Error.");
         }
         this.storage.stats.set(uuid, APIData);
         await this.putLocalStorage(`stats:${uuid}`, APIData);
