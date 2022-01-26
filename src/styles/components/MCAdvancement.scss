@@ -7,26 +7,26 @@
     background-size: 100%;
 
     &.normal {
-        background-image: url("/img/gui/advancement_normal.png");
+        background-image: url("/img/gui/advancements/normal.png");
 
         &.done {
-            background-image: url("/img/gui/advancement_normal_done.png");
+            background-image: url("/img/gui/advancements/normal_done.png");
         }
     }
 
     &.goal {
-        background-image: url("/img/gui/advancement_goal.png");
+        background-image: url("/img/gui/advancements/goal.png");
 
         &.done {
-            background-image: url("/img/gui/advancement_goal_done.png");
+            background-image: url("/img/gui/advancements/goal_done.png");
         }
     }
 
     &.challenge {
-        background-image: url("/img/gui/advancement_challenge.png");
+        background-image: url("/img/gui/advancements/challenge.png");
 
         &.done {
-            background-image: url("/img/gui/advancement_challenge_done.png");
+            background-image: url("/img/gui/advancements/challenge_done.png");
         }
     }
 }
