@@ -45,6 +45,9 @@ $sizes: (
 
     // line styling
     & .lines > svg {
+        // fix the excess space on the bottom
+        display: block;
+
         line,
         polyline {
             stroke-linecap: square;
