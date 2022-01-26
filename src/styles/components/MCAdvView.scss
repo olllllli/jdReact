@@ -24,8 +24,8 @@ $sizes: (
 );
 
 .MCAdvView {
-    width: 100%;
-    height: 100%;
+    width: fit-content;
+    height: fit-content;
     background-size: calc(var(--pixel-size) * 16);
     padding: calc(var(--pixel-size) * 2);
     text-align: center;
@@ -33,22 +33,13 @@ $sizes: (
     & > div {
         display: inline-grid;
         gap: calc(var(--pixel-size) * 2);
-
-        // // svg positioning
-        // & > svg {
-        //     grid;
-        // }
     }
 
     // goes through the map and builds the grid-areas and background-images
     @each $category, $size in $sizes {
-        &.#{$category} {
-            background-image: url("/img/gui/background_#{$category}.png");
-
-            & > div {
-                grid-template-rows: repeat(map.get($size, "rows"), calc(var(--pixel-size) * 12));
-                grid-template-columns: repeat(map.get($size, "cols"), calc(var(--pixel-size) * 12));
-            }
+        &.#{$category} > div {
+            grid-template-rows: repeat(map.get($size, "rows"), calc(var(--pixel-size) * 12));
+            grid-template-columns: repeat(map.get($size, "cols"), calc(var(--pixel-size) * 12));
         }
     }
 

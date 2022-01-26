@@ -1,0 +1,45 @@
+.MCAdvContainer {
+    width: fit-content;
+    height: fit-content;
+    padding: calc(var(--pixel-size) * 2);
+
+    // outside border
+    border-image: url("/img/gui/border_gui.png") 2 fill;
+    border-width: calc(var(--pixel-size) * 2);
+    border-style: solid;
+
+    // header styling
+    & > .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        // add some space below
+        margin-bottom: calc(var(--pixel-size) * 2);
+    }
+
+    // view styling
+    & > .view {
+        border-style: inset solid;
+        border-image: url("/img/gui/border_gui_inset.png") 1 fill;
+        border-width: var(--pixel-size);
+
+        & > .MCAdvView {
+            &.story {
+                background-image: url("/img/gui/background_story.png");
+            }
+            &.nether {
+                background-image: url("/img/gui/background_nether.png");
+            }
+            &.end {
+                background-image: url("/img/gui/background_end.png");
+            }
+            &.adventure {
+                background-image: url("/img/gui/background_adventure.png");
+            }
+            &.husbandry {
+                background-image: url("/img/gui/background_husbandry.png");
+            }
+        }
+    }
+}
