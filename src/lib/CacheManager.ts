@@ -14,8 +14,6 @@ import { API } from "lib/API";
  *      ROUTE -> { lastUpdated: timestampFull, data }
  */
 
-// TODO: possibly add uuid to username array here
-
 export class CacheManager {
     // in memory storage, if it's in here, its up to date.
     private storage: CacheManagerStorage;
