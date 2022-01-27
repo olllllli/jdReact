@@ -14,26 +14,23 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
     // the click and hover stat
     const [opened, setOpened] = useState(false);
 
-    // process the children, filter out anything that doesnt have the MCOptionProps
-    const children = React.Children.map(props.children, (child) => {
-        if (child && typeof child === "object" && "props" in child && "value" in child.props && "display" in child.props) {
-            return child.props as MCOptionProps;
-        }
-    });
-
     // check the children, disable if no children
     let isDisabled = false;
-    if (!children || children.length === 0) {
-        // there were no children
+    if (!props.children) {
         isDisabled = true;
     }
+
+    // console.log(isDisabled);
 
     // on change, setValue and call the given onChange function with the value
     return (
         <div
             className={"MCSelect " + (opened ? "open" : "closed")}
-            onClick={() =>
-                !isDisabled && setOpened(!opened)
+            onClick={() => {
+                if (!isDisabled) {
+                    setOpened(!opened);
+                }
+            }
             }
         >
             <div className="selectHeader">{props.currentValue}</div>
