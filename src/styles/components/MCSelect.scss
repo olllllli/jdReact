@@ -23,7 +23,16 @@ $scale: 1;
         border-style: solid;
         border-image: url("/img/gui/border_select_open.png") 2 fill;
         border-width: calc(var(--pixel-size) * #{$scale});
-        // z-index: 1000;
+
+        max-height: calc(1.2em * 8);
+
+        // hiding scrollbar
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
     }
 
     // styling the visibility for states
@@ -39,6 +48,8 @@ $scale: 1;
             height: 0px;
             border-top: unset;
             border-bottom: unset;
+
+            overflow-y: hidden;
         }
     }
 
@@ -55,6 +66,8 @@ $scale: 1;
         & > .selectBody {
             visibility: visible;
             min-height: 1.2em;
+
+            overflow-y: auto;
         }
     }
 
@@ -64,6 +77,10 @@ $scale: 1;
 
         &:hover {
             background-color: #177400;
+        }
+
+        &.selected {
+            background-color: #4a484a;
         }
     }
 }

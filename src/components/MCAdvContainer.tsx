@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import MCAdvView from "./MCAdvView";
-import { MCSelect, MCOption } from "./MCSelect";
+import { MCSelect } from "./MCSelect";
+import { MCOption } from "./MCOption";
 
 import "styles/components/MCAdvContainer.scss";
 import { cache } from "index";
@@ -24,27 +25,34 @@ const MCAdvContainer: FunctionComponent<{}> = () => {
 
     // create all the user options
     let users: JSX.Element[] = [];
-    usernames.forEach((username, uuid) => {
-        users.push(<MCOption value={uuid} display={username} key={uuid} onSelect={setCurrentUser} />);
-    });
+    Array.from(usernames)
+        .sort(([, a], [, b]) => a.localeCompare(b))
+        .forEach(([uuid, username]) => {
+            users.push(
+                <MCOption value={uuid} key={uuid} onSelect={setCurrentUser}>
+                    {username}
+                </MCOption>
+            );
+        });
+
+    Array.from(usernames);
 
     console.log("rendered advContainer");
     return (
         <div className="MCAdvContainer">
             <div className="header">
                 <div>
-                    <MCSelect currentValue={currentUser ?? ""} onChange={setCurrentUser}>
+                    <MCSelect currentValue={usernames.get(currentUser ?? "")}>
                         {users}
                     </MCSelect>
                 </div>
                 <div>
-                    {/* TODO: do this more responsibly */}
                     <MCSelect currentValue={category[0].toUpperCase() + category.slice(1, category.length)} onChange={setCategory}>
-                        <MCOption onSelect={setCategory} value="story" display="Story" selected={true} />
-                        <MCOption onSelect={setCategory} value="nether" display="Nether" />
-                        <MCOption onSelect={setCategory} value="end" display="End" />
-                        <MCOption onSelect={setCategory} value="adventure" display="Adventure" />
-                        <MCOption onSelect={setCategory} value="husbandry" display="Husbandry" />
+                        <MCOption onSelect={setCategory} value="story" selected={true} >Story</MCOption>
+                        <MCOption onSelect={setCategory} value="nether">Nether</MCOption>
+                        <MCOption onSelect={setCategory} value="end">End</MCOption>
+                        <MCOption onSelect={setCategory} value="adventure">Adventure</MCOption>
+                        <MCOption onSelect={setCategory} value="husbandry">Husbandry</MCOption>
                     </MCSelect>
                 </div>
             </div>
