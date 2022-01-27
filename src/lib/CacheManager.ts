@@ -1,13 +1,13 @@
 import { API } from "lib/API";
 
-/** 
+/**
  * Caching Model:
  *  - On page load, fetch last updated timestamp
  *  - When data for a certain player is needed:
  *    - Check if its stored in the object, if not
  *    - Check the age of the locally stored player's data
  *    - Fetch if needed, otherwise grab locally stored
- * 
+ *
  *  - Data for data routes is cached like:
  *      ROUTE:uuid -> { lastUpdated: timestampFull, data: data }
  *  - Data for meta routes is cached like:
@@ -26,7 +26,7 @@ export class CacheManager {
             UUIDList: null,
             advancements: new Map<uuid, advancementsData>(),
             players: new Map<uuid, playerData>(),
-            stats: new Map<uuid, statsData>()
+            stats: new Map<uuid, statsData>(),
         };
     }
 
@@ -45,7 +45,7 @@ export class CacheManager {
         // get the remote date
         const remoteAge = new Date(await this.getLastUpdated());
 
-        // get the local storage data, 
+        // get the local storage data,
         let storedData = window.localStorage.getItem(key);
         if (storedData) {
             // there was data in the local storage, check its date
@@ -67,7 +67,7 @@ export class CacheManager {
         const timestamp = await this.getLastUpdated();
         const dataToBeStored: localStorageValue<K> = {
             lastUpdated: timestamp,
-            data: data
+            data: data,
         };
 
         // store the data
@@ -130,9 +130,11 @@ export class CacheManager {
 
         // TODO: Possibly add a series version
         // get all the usernames and add them to the mapping in parallel
-        await Promise.all(uuids.map((uuid) => {
-            return getUsername(this, uuid);
-        }));
+        await Promise.all(
+            uuids.map((uuid) => {
+                return getUsername(this, uuid);
+            })
+        );
         // TODO: Sort by username
 
         return mapping;

@@ -111,5 +111,5 @@ export const layoutSizes = {
     nether: { rows: 19, cols: 12 },
     end: { rows: 8, cols: 10 },
     adventure: { rows: 29, cols: 8 },
-    husbandry: { rows: 17, cols: 10 }
+    husbandry: { rows: 17, cols: 10 },
 };

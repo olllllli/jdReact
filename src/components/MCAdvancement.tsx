@@ -8,15 +8,15 @@ type MCAdvancementProps = {
     done?: boolean;
     style?: React.CSSProperties;
 } & (
-        | {
-            category: "custom";
-            type: AdvType;
-        }
-        | {
-            category: AdvCategory;
-            name: string;
-        }
-    );
+    | {
+          category: "custom";
+          type: AdvType;
+      }
+    | {
+          category: AdvCategory;
+          name: string;
+      }
+);
 
 // TODO: Get this working
 // maybe use state on the container and the container marks each as done instead of reloading all on user change.

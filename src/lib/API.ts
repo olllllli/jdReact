@@ -9,7 +9,7 @@ export namespace API {
         advancements: "/advancements",
         player: "/player",
         stats: "/stats",
-    }
+    };
 
     // NOTE: These are treated like namespaces
     // TODO: Type annotate and deal with the error responses. Raise on errors and dont return anything.
@@ -22,8 +22,8 @@ export namespace API {
             }
             const data = await res.text();
             return data;
-        }
-    }
+        },
+    };
 
     /* uuid list endpoint */
     export const UUIDList: metaEndpoint<uuid[] | null> = {
@@ -34,8 +34,8 @@ export namespace API {
             }
             const data = await res.json();
             return data;
-        }
-    }
+        },
+    };
 
     /* advancements endpoint */
     export const advancements: dataEndpoint<advancementsData | null> = {
@@ -46,8 +46,8 @@ export namespace API {
             }
             const data = await res.json();
             return data;
-        }
-    }
+        },
+    };
 
     /* player endpoint */
     export const player: dataEndpoint<playerData | null> = {
@@ -58,8 +58,8 @@ export namespace API {
             }
             const data = await res.json();
             return data;
-        }
-    }
+        },
+    };
 
     /* advancements endpoint */
     export const stats: dataEndpoint<statsData | null> = {
@@ -70,6 +70,6 @@ export namespace API {
             }
             const data = await res.json();
             return data;
-        }
-    }
+        },
+    };
 }

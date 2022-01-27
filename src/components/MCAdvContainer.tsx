@@ -25,9 +25,7 @@ const MCAdvContainer: FunctionComponent<{}> = () => {
     // create all the user options
     let users: JSX.Element[] = [];
     usernames.forEach((username, uuid) => {
-        users.push(
-            <MCOption value={uuid} display={username} key={uuid} />
-        );
+        users.push(<MCOption value={uuid} display={username} key={uuid} />);
     });
 
     console.log("rendered advContainer");
@@ -35,9 +33,7 @@ const MCAdvContainer: FunctionComponent<{}> = () => {
         <div className="MCAdvContainer">
             <div className="header">
                 <div>
-                    <MCSelect onChange={setCurrentUser}>
-                        {users}
-                    </MCSelect>
+                    <MCSelect onChange={setCurrentUser}>{users}</MCSelect>
                 </div>
                 <div>
                     <MCSelect onChange={setCategory}>

@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import * as React from 'react';
+import * as React from "react";
 
 import "styles/components/MCSelect.scss";
 
@@ -17,7 +17,9 @@ export const MCOption: FunctionComponent<MCOptionProps> = (props) => {
     //     <option value={props.value}>{props.display}</option>
     // );
     return (
-        <div className="MCOption" id={props.value}>{props.display}</div>
+        <div className="MCOption" id={props.value}>
+            {props.display}
+        </div>
     );
 };
 
@@ -32,7 +34,7 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
 
     // process the children, filter out anything that doesnt have the MCOptionProps
     const children = React.Children.map(props.children, (child) => {
-        if (child && typeof child === "object" && "props" in child && ("value" in child.props && "display" in child.props)) {
+        if (child && typeof child === "object" && "props" in child && "value" in child.props && "display" in child.props) {
             return child.props as MCOptionProps;
         }
     });
@@ -60,13 +62,14 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
 
     // on change, setValue and call the given onChange function with the value
     return (
-        <div className={"MCSelect " + (opened ? "open" : "closed")} onClick={(e) => { setOpened(!opened); }}>
-            <div className="selectHeader">
-                {currentValue.display}
-            </div>
-            <div className="selectBody">
-                {props.children}
-            </div>
+        <div
+            className={"MCSelect " + (opened ? "open" : "closed")}
+            onClick={(e) => {
+                setOpened(!opened);
+            }}
+        >
+            <div className="selectHeader">{currentValue.display}</div>
+            <div className="selectBody">{props.children}</div>
         </div>
     );
 };

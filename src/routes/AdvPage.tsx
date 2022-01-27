@@ -14,7 +14,8 @@ const AdvPage: FunctionComponent<{}> = () => {
             <header className="SubpageHeader">
                 <Link to="/" className="MCBack" />
                 <MCToast>
-                    <img src={knowledge_book} alt="Knowledge Book Icon" /><h2>Advancements</h2>
+                    <img src={knowledge_book} alt="Knowledge Book Icon" />
+                    <h2>Advancements</h2>
                 </MCToast>
             </header>
             <main>
