@@ -9,6 +9,7 @@ interface MCOptionProps {
     value: string;
     display: string;
     selected?: boolean;
+    onSelect: (value: string) => void;
 }
 
 export const MCOption: FunctionComponent<MCOptionProps> = (props) => {
@@ -17,7 +18,7 @@ export const MCOption: FunctionComponent<MCOptionProps> = (props) => {
     //     <option value={props.value}>{props.display}</option>
     // );
     return (
-        <div className="MCOption" id={props.value}>
+        <div onClick={() => props.onSelect(props.value)} className="MCOption" id={props.value}>
             {props.display}
         </div>
     );
@@ -26,6 +27,7 @@ export const MCOption: FunctionComponent<MCOptionProps> = (props) => {
 /* The Select component, should only be given MCOption as children */
 interface MCSelectProps {
     onChange?: React.Dispatch<React.SetStateAction<any>>;
+    currentValue: string;
 }
 
 export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
@@ -41,7 +43,7 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
 
     // check the children, disable if no children
     let isDisabled = false;
-    let selectedValue: MCOptionProps = { display: "", value: "" };
+    let selectedValue: MCOptionProps = { display: "", value: "", onSelect: (_: string) => {} };
     // const options = [];
     if (!children || children.length === 0) {
         // there were no children
@@ -58,7 +60,7 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
     }
 
     // store the current value on the state
-    const [currentValue, setCurrentValue] = useState<MCOptionProps>(selectedValue);
+    // const [currentValue, setCurrentValue] = useState<MCOptionProps>(selectedValue);
 
     // on change, setValue and call the given onChange function with the value
     return (
@@ -68,7 +70,7 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
                 setOpened(!opened);
             }}
         >
-            <div className="selectHeader">{currentValue.display}</div>
+            <div className="selectHeader">{props.currentValue}</div>
             <div className="selectBody">{props.children}</div>
         </div>
     );
