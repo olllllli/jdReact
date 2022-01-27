@@ -14,6 +14,8 @@ import { API } from "lib/API";
  *      ROUTE -> { lastUpdated: timestampFull, data }
  */
 
+// TODO: possibly add uuid to username array here
+
 export class CacheManager {
     // in memory storage, if it's in here, its up to date.
     private storage: CacheManagerStorage;
@@ -28,10 +30,14 @@ export class CacheManager {
             players: new Map<uuid, playerData>(),
             stats: new Map<uuid, statsData>()
         };
+    }
 
-        // populate the last updated
-        // DEBUG: UNCOMMENT THIS
-        // this.getLastUpdated();
+    /* Initialises the cache, should be called before anything else */
+    async init() {
+        console.log("init");
+        if (!this.storage.lastUpdated) {
+            await this.getLastUpdated();
+        }
     }
 
     /* Gets data from the localStorage if its upto date, otherwise returns null */

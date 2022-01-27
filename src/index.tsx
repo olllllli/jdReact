@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import "styles/global.scss";
 import { CacheManager } from 'lib/CacheManager';
 
+// App will call .init() so it can be called in a useEffect type scenario
 export const cache = new CacheManager();
 
 ReactDOM.render(
