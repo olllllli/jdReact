@@ -31,7 +31,7 @@ $sizes: (
     text-align: center;
 
     & > div {
-        display: inline-grid;
+        display: grid;
         gap: calc(var(--pixel-size) * 2);
     }
 
@@ -47,6 +47,7 @@ $sizes: (
     & .lines > svg {
         // fix the excess space on the bottom
         display: block;
+        pointer-events: none;
 
         line,
         polyline {
