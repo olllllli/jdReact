@@ -18,7 +18,6 @@ const App: FunctionComponent<{}> = () => {
 
     useEffect(() => {
         async function initialiseAPI() {
-            console.log("initialising api");
             await cache.init();
             setInitialised(true);
         }

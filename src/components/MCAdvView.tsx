@@ -46,7 +46,6 @@ const MCAdvView: FunctionComponent<MCAdvViewProps> = (props) => {
     const [userData, setUserData] = useState<advancementsData>({ DataVersion: -1 }); // TODO: I also think this is probs bad
     useEffect(() => {
         async function getUserData(user: uuid) {
-            console.log("get user data");
             const data = await cache.getAdvancements(user);
             setUserData(data); // TODO: I think this is really bad because of unknown return type when fail since unimplementations
         }

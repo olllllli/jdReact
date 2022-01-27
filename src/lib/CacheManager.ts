@@ -21,7 +21,7 @@ export class CacheManager {
     private storage: CacheManagerStorage;
 
     constructor() {
-        console.log("new cache manager");
+        console.info("CacheManager: constructor() called.");
         // initialise the storage
         this.storage = {
             lastUpdated: null,
@@ -34,7 +34,7 @@ export class CacheManager {
 
     /* Initialises the cache, should be called before anything else */
     async init() {
-        console.log("init");
+        console.info("CacheManager: init() called.");
         if (!this.storage.lastUpdated) {
             await this.getLastUpdated();
         }
@@ -115,6 +115,29 @@ export class CacheManager {
         this.storage.UUIDList = APIData;
         await this.putLocalStorage("UUIDList", APIData);
         return APIData;
+    }
+
+    /* Returns a map of uuids to usernames, via getUUIDs and getPlayer. Makes the calls in parallel */
+    async getUUIDMap(): Promise<Map<uuid, string>> {
+        const uuids = await this.getUUIDs();
+        const mapping = new Map<uuid, string>();
+
+        // the function which adds it to the map, passing the cache because i hate `this`
+        async function getUsername(cache: CacheManager, uuid: uuid) {
+            const data = await cache.getPlayer(uuid);
+            const username = data.username;
+            mapping.set(uuid, username);
+            return uuid;
+        }
+
+        // TODO: Possibly add a series version
+        // get all the usernames and add them to the mapping in parallel
+        await Promise.all(uuids.map((uuid) => {
+            return getUsername(this, uuid);
+        }));
+        // TODO: Sort by username
+
+        return mapping;
     }
 
     /* Real data getters, all of these effectively function the same */
