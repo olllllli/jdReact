@@ -1,12 +1,11 @@
+import React from "react";
 import { FunctionComponent, useState } from "react";
-import * as React from "react";
 
 import "styles/components/MCSelect.scss";
-import { MCOptionProps } from "./MCOption";
+// TODO: Capture click away
 
 /* The Select component, should only be given MCOption as children */
 interface MCSelectProps {
-    onChange?: React.Dispatch<React.SetStateAction<any>>;
     currentValue?: string;
 }
 
@@ -15,12 +14,23 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
     const [opened, setOpened] = useState(false);
 
     // check the children, disable if no children
-    let isDisabled = false;
-    if (!props.children) {
-        isDisabled = true;
-    }
+    const isDisabled = (!props.children);
 
-    // console.log(isDisabled);
+    // set the selected tag on the currentValue
+    // also map the values to their children for the header display
+    // TODO: Review this
+    const valueToDisplay = new Map<string, any>();
+    const filteredChildren = React.Children.map(props.children, (child) => {
+        // is component && .props.value
+        if (React.isValidElement(child) && "value" in child.props) {
+            // add/set selected prop
+            valueToDisplay.set(child.props.value, child.props.children);
+            return React.cloneElement(child, { selected: (child.props.value === props.currentValue) });
+        } else {
+            // throw away since its not a element
+            return undefined;
+        }
+    });
 
     // on change, setValue and call the given onChange function with the value
     return (
@@ -33,8 +43,8 @@ export const MCSelect: FunctionComponent<MCSelectProps> = (props) => {
             }
             }
         >
-            <div className="selectHeader">{props.currentValue}</div>
-            <div className="selectBody">{props.children}</div>
+            <div className="selectHeader">{valueToDisplay.get(props.currentValue ?? "")}</div>
+            <div className="selectBody">{filteredChildren}</div>
         </div>
     );
 };

@@ -35,20 +35,20 @@ const MCAdvContainer: FunctionComponent<{}> = () => {
             );
         });
 
-    Array.from(usernames);
 
+    // return the component
     console.log("rendered advContainer");
     return (
         <div className="MCAdvContainer">
             <div className="header">
                 <div>
-                    <MCSelect currentValue={usernames.get(currentUser ?? "")}>
+                    <MCSelect currentValue={currentUser}>
                         {users}
                     </MCSelect>
                 </div>
                 <div>
-                    <MCSelect currentValue={category[0].toUpperCase() + category.slice(1, category.length)} onChange={setCategory}>
-                        <MCOption onSelect={setCategory} value="story" selected={true} >Story</MCOption>
+                    <MCSelect currentValue={category}>
+                        <MCOption onSelect={setCategory} value="story">Story</MCOption>
                         <MCOption onSelect={setCategory} value="nether">Nether</MCOption>
                         <MCOption onSelect={setCategory} value="end">End</MCOption>
                         <MCOption onSelect={setCategory} value="adventure">Adventure</MCOption>

@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import * as React from "react";
 
 import "styles/components/MCSelect.scss";
 
@@ -13,10 +12,10 @@ export interface MCOptionProps {
 }
 
 export const MCOption: FunctionComponent<MCOptionProps> = (props) => {
-    // For now returns an option
+    // if no children given, just use value as its display
     return (
-        <div onClick={() => props.onSelect(props.value)} className="MCOption" id={props.value}>
-            {props.children}
+        <div onClick={() => props.onSelect(props.value)} className={"MCOption" + (props.selected ? " selected" : "")}>
+            {props.children ?? props.value}
         </div>
     );
 };
