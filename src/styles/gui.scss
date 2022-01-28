@@ -14,3 +14,29 @@ a.MCBack {
         // filter: invert(0.05) sepia(1) saturate(1.5) hue-rotate(195deg); // best
     }
 }
+
+// assume the container is a square
+div.loadingIcon {
+    display: inline-block;
+    background-position: 50% 50%;
+    background-size: 62.5% 50%;
+    background-repeat: no-repeat;
+    animation: 0.5s linear infinite alternate loadingIcon;
+}
+@keyframes loadingIcon {
+    from {
+        background-image: url("/img/gui/load_1.png");
+    }
+    25% {
+        background-image: url("/img/gui/load_2.png");
+    }
+    50% {
+        background-image: url("/img/gui/load_3.png");
+    }
+    75% {
+        background-image: url("/img/gui/load_4.png");
+    }
+    to {
+        background-image: url("/img/gui/load_5.png");
+    }
+}
