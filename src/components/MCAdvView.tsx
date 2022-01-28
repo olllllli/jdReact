@@ -8,7 +8,7 @@ import MCAdvancement from "./MCAdvancement";
 
 /* Converts the positions of two advancements, to a line between them */
 // TODO: Optimise this
-type pos = { row: number; col: number };
+type pos = { row: number; col: number; };
 function posToLine(parentPos: pos, childPos: pos, color: "white" | "black", key?: string) {
     // calculate the middle coords of each
     // NOTE: Assumes gridsquare are 12*pixelSize and gridgap is 2*pixelSize
@@ -63,9 +63,12 @@ const MCAdvView: FunctionComponent<MCAdvViewProps> = (props) => {
         // check whether the advancement is completed
         const advNamespace: advancementNamespace = `minecraft:${props.category}/${advName}`;
         const advDone = userData[advNamespace] ? userData[advNamespace].done : false;
+        const advCriteriaData = userData[advNamespace] ? userData[advNamespace].criteria : {};
 
         // add the advancement
-        advancements.push(<MCAdvancement category={props.category} name={advName} style={{ gridArea: gridArea }} key={advName} done={advDone} />);
+        advancements.push(
+            <MCAdvancement category={props.category} name={advName} style={{ gridArea: gridArea }} key={advName} criteriaData={advCriteriaData} done={advDone} />
+        );
 
         // generate the lines from the advancement to its children
         const children = pos.children;

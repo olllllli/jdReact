@@ -2,16 +2,19 @@ import { FunctionComponent } from "react";
 
 import "styles/components/MCAdvTooltip.scss";
 
+// TODO: Restrict height and use overflow
+
 /* A component representing the tooltip shown when hovering over an Advancement */
 interface MCAdvTooltipProps {
     header: string;
     description: string;
-    done?: boolean;
-    open?: boolean;
     criteria: {
         criterion: string,
         done: timestampBasic | null;
     }[];
+    type: AdvType;
+    done?: boolean;
+    open?: boolean;
 }
 
 const MCAdvTooltip: FunctionComponent<MCAdvTooltipProps> = (props) => {
@@ -37,11 +40,11 @@ const MCAdvTooltip: FunctionComponent<MCAdvTooltipProps> = (props) => {
 
     // return the rendering
     return (
-        <div className="MCAdvTooltip">
+        <div className={"MCAdvTooltip" + (props.open ? " open" : "")}>
             <div className={"header" + (props.done ? " done" : "")}>
                 {props.header}
             </div>
-            <div className="description">
+            <div className={`description ${props.type}`}>
                 {props.description}
             </div>
             <div className={"criteria"}>
