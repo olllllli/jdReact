@@ -45,6 +45,17 @@
         padding: calc(var(--pixel-size) * 2);
         padding-top: calc(var(--pixel-size) * 4);
 
+        // max height
+        max-height: 10.5em;
+        overflow-y: auto;
+
+        // hiding scrollbar
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+
         // the Click For More...
         font-style: italic;
         color: #aaaaaa;
