@@ -1,0 +1,6 @@
+.MCStatView {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: calc(var(--pixel-size) * 2);
+}
