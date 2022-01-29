@@ -19,7 +19,7 @@ const StatsPage: FunctionComponent<{}> = () => {
             </header>
             <main>
                 <div style={{ width: 450 }}>
-                    <MCStatView statName="minecraft:broken/minecraft:cobblestone" />
+                    <MCStatView statName="minecraft:custom/minecraft:play_time" />
                 </div>
             </main>
         </>

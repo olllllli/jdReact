@@ -1,6 +1,30 @@
+@use "/src/styles/mccolors" as MC;
+@use "sass:map";
+
 .MCStatView {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    gap: calc(var(--pixel-size) * 2);
+    // DEBUG:
+    height: 400px;
+
+    &.loaded {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: calc(var(--pixel-size) * 2);
+    }
+
+    &.loading {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 2rem;
+        color: map.get(MC.$foreground, "white");
+        text-shadow: 0.1em 0.1em map.get(MC.$shadow, "white");
+
+        & > .loadingIcon {
+            width: calc(var(--pixel-size) * 16);
+            height: calc(var(--pixel-size) * 16);
+        }
+    }
 }

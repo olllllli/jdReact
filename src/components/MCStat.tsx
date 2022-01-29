@@ -18,7 +18,7 @@ const MCStat: FunctionComponent<MCStatProps> = (props) => {
                 <img className="icon" />
                 <span className="username">{props.player.username}</span>
             </div>
-            <span className="value">{props.displayedValue}</span>
+            <span className="value">{props.displayedValue.toFixed(2)}</span>
         </div>
     );
 };
