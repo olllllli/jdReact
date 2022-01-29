@@ -1,0 +1,86 @@
+$scale: 1;
+
+.MCSelect {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: #{$scale}rem;
+    height: calc(1.2em + calc(4 * calc(var(--pixel-size) * #{$scale})));
+
+    // styling the header and the body
+    & > .selectHeader {
+        padding: calc(var(--pixel-size) * #{$scale});
+
+        border-style: solid;
+        border-image: url("/img/gui/border_select.png") 2 fill;
+        border-width: calc(var(--pixel-size) * #{$scale});
+
+        &:hover {
+            border-image: url("/img/gui/border_select_hover.png") 2 fill;
+        }
+    }
+
+    & > .selectBody {
+        border-style: solid;
+        border-image: url("/img/gui/border_select_open.png") 2 fill;
+        border-width: calc(var(--pixel-size) * #{$scale});
+
+        max-height: calc(1.2em * 8);
+
+        // hiding scrollbar
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    // styling the visibility for states
+    // the unclicked state
+    &.closed {
+        & > .selectHeader {
+            visibility: visible;
+            min-height: 1.2em;
+        }
+
+        & > .selectBody {
+            visibility: hidden;
+            height: 0px;
+            border-top: unset;
+            border-bottom: unset;
+
+            overflow-y: hidden;
+        }
+    }
+
+    // the clicked state
+    &.open {
+        & > .selectHeader {
+            visibility: hidden;
+            height: 0px;
+            border-top: unset;
+            border-bottom: unset;
+            padding: 0px;
+        }
+
+        & > .selectBody {
+            visibility: visible;
+            min-height: 1.2em;
+
+            overflow-y: auto;
+        }
+    }
+
+    // styling the children
+    .selectBody > .MCOption {
+        padding: calc(var(--pixel-size) * #{$scale});
+
+        &:hover {
+            background-color: #177400;
+        }
+
+        &.selected {
+            background-color: #4a484a;
+        }
+    }
+}

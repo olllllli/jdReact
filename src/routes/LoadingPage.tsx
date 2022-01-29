@@ -7,12 +7,11 @@ const LoadingPage: FunctionComponent<{}> = () => {
         <>
             <header className="SubpageHeader">
                 <MCToast>
-                    <img src={barrier} alt="Barrier Icon" /><h2>Loading...</h2>
+                    <img src={barrier} alt="Barrier Icon" />
+                    <h2>Loading...</h2>
                 </MCToast>
             </header>
-            <main>
-
-            </main>
+            <main></main>
         </>
     );
 };

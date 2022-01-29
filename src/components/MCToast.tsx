@@ -1,13 +1,15 @@
 import { FunctionComponent, ReactElement } from "react";
 import { Link } from "react-router-dom";
-import "styles/components/MCToast.scss"
+import "styles/components/MCToast.scss";
 
-type MCToastProps = {
-    type: "link",
-    to: string
-} | {
-    type?: "banner"
-}
+type MCToastProps =
+    | {
+          type: "link";
+          to: string;
+      }
+    | {
+          type?: "banner";
+      };
 
 const MCToast: FunctionComponent<MCToastProps> = (props) => {
     // determine whether it was a button or a link
@@ -18,17 +20,13 @@ const MCToast: FunctionComponent<MCToastProps> = (props) => {
             <Link to={props.to} className="MCToast">
                 {props.children}
             </Link>
-        )
+        );
     } else {
         // banner type
-        parentElement = (
-            <div className="MCToast">
-                {props.children}
-            </div>
-        )
+        parentElement = <div className="MCToast">{props.children}</div>;
     }
 
     return parentElement;
-}
+};
 
 export default MCToast;

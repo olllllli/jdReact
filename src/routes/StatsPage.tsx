@@ -6,21 +6,19 @@ import "styles/routes/common.scss";
 import "styles/gui.scss";
 import written_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/written_book.png";
 
-
 const StatsPage: FunctionComponent<{}> = () => {
     return (
         <>
             <header className="SubpageHeader">
                 <Link to="/" className="MCBack" />
                 <MCToast>
-                    <img src={written_book} alt="Written Book Icon" /><h2>Statistics</h2>
+                    <img src={written_book} alt="Written Book Icon" />
+                    <h2>Statistics</h2>
                 </MCToast>
             </header>
-            <main>
-
-            </main>
+            <main></main>
         </>
     );
-}
+};
 
 export default StatsPage;

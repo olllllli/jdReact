@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import MCAdvView from "./MCAdvView";
-import { MCSelect, MCOption } from "./MCSelect";
+import { MCSelect } from "./MCSelect";
+import { MCOption } from "./MCOption";
 
 import "styles/components/MCAdvContainer.scss";
 import { cache } from "index";
@@ -8,7 +9,7 @@ import { cache } from "index";
 /* The container gui for an advancement view, contains the selects and the view */
 // TODO: Possibly figure out how to only rerender the view
 const MCAdvContainer: FunctionComponent<{}> = () => {
-    const [category, setCategory] = useState<AdvCategory>("story");
+    const [category, setCategory] = useState<string>("story");
     const [currentUser, setCurrentUser] = useState<uuid | undefined>(undefined);
     const [usernames, setUsernames] = useState<Map<uuid, string>>(new Map<uuid, string>());
 
@@ -24,33 +25,39 @@ const MCAdvContainer: FunctionComponent<{}> = () => {
 
     // create all the user options
     let users: JSX.Element[] = [];
-    usernames.forEach((username, uuid) => {
-        users.push(
-            <MCOption value={uuid} display={username} key={uuid} />
-        );
-    });
+    Array.from(usernames)
+        .sort(([, a], [, b]) => a.localeCompare(b))
+        .forEach(([uuid, username]) => {
+            users.push(
+                <MCOption value={uuid} key={uuid} onSelect={setCurrentUser}>
+                    {username}
+                </MCOption>
+            );
+        });
 
+
+    // return the component
     console.log("rendered advContainer");
     return (
         <div className="MCAdvContainer">
             <div className="header">
                 <div>
-                    <MCSelect onChange={setCurrentUser}>
+                    <MCSelect currentValue={currentUser}>
                         {users}
                     </MCSelect>
                 </div>
                 <div>
-                    <MCSelect onChange={setCategory}>
-                        <MCOption value="story" display="Story" selected={true} />
-                        <MCOption value="nether" display="Nether" />
-                        <MCOption value="end" display="End" />
-                        <MCOption value="adventure" display="Adventure" />
-                        <MCOption value="husbandry" display="Husbandry" />
+                    <MCSelect currentValue={category}>
+                        <MCOption onSelect={setCategory} value="story">Story</MCOption>
+                        <MCOption onSelect={setCategory} value="nether">Nether</MCOption>
+                        <MCOption onSelect={setCategory} value="end">End</MCOption>
+                        <MCOption onSelect={setCategory} value="adventure">Adventure</MCOption>
+                        <MCOption onSelect={setCategory} value="husbandry">Husbandry</MCOption>
                     </MCSelect>
                 </div>
             </div>
             <div className="view">
-                <MCAdvView category={category} user={currentUser} />
+                <MCAdvView category={category as AdvCategory} user={currentUser} />
             </div>
         </div>
     );

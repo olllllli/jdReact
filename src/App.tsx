@@ -1,14 +1,14 @@
-import { FunctionComponent, useEffect, useState } from 'react';
-import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { FunctionComponent, useEffect, useState } from "react";
+import "./App.css";
+import { Route, Routes } from "react-router-dom";
 
-import LandingPage from 'routes/LandingPage';
-import AdvPage from 'routes/AdvPage';
-import PlayersPage from 'routes/PlayersPage';
-import StatsPage from 'routes/StatsPage';
-import ErrorPage from 'routes/ErrorPage';
-import LoadingPage from 'routes/LoadingPage';
-import { cache } from 'index';
+import LandingPage from "routes/LandingPage";
+import AdvPage from "routes/AdvPage";
+import PlayersPage from "routes/PlayersPage";
+import StatsPage from "routes/StatsPage";
+import ErrorPage from "routes/ErrorPage";
+import LoadingPage from "routes/LoadingPage";
+import { cache } from "index";
 
 console.log("App Loading");
 
@@ -38,9 +38,7 @@ const App: FunctionComponent<{}> = () => {
             </Routes>
         );
     } else {
-        return (
-            <LoadingPage />
-        );
+        return <LoadingPage />;
     }
 };
 

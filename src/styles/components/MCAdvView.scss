@@ -31,8 +31,10 @@ $sizes: (
     text-align: center;
 
     & > div {
-        display: inline-grid;
+        display: grid;
         gap: calc(var(--pixel-size) * 2);
+        width: fit-content;
+        margin: 0 auto;
     }
 
     // goes through the map and builds the grid-areas and background-images
@@ -47,6 +49,7 @@ $sizes: (
     & .lines > svg {
         // fix the excess space on the bottom
         display: block;
+        pointer-events: none;
 
         line,
         polyline {
