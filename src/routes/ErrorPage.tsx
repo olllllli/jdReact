@@ -16,7 +16,8 @@ const ErrorPage: FunctionComponent<{}> = () => {
                     <h2>Error 404: Nothing Here ._.</h2>
                 </MCToast>
             </header>
-            <main></main>
+            <main>
+            </main>
         </>
     );
 };

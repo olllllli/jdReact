@@ -1,0 +1,111 @@
+// Tooltip itself styling
+.MCAdvTooltip {
+    text-align: left;
+    font-size: 2rem;
+    line-height: 2rem;
+    text-shadow: 0.1em 0.1em #3f3f3f;
+
+    width: min-content;
+
+    border-image: url("/img/gui/border_advtooltip_content.png") 2 fill;
+    border-width: calc(var(--pixel-size) * 2);
+    border-style: solid;
+
+    & > .header {
+        // causes the header to overlap
+        margin: calc(var(--pixel-size) * -2) calc(var(--pixel-size) * -2) 0px calc(var(--pixel-size) * -2);
+        padding: calc(var(--pixel-size) * 4);
+        padding-left: calc(var(--pixel-size) * 30);
+        width: max-content;
+
+        border-image: url("/img/gui/border_advtooltip_header_blue.png") 2 fill;
+        border-width: calc(var(--pixel-size) * 2);
+        border-style: solid;
+
+        &.done {
+            border-image: url("/img/gui/border_advtooltip_header_orange.png") 2 fill;
+        }
+    }
+
+    & > .description {
+        padding: calc(var(--pixel-size) * 2);
+        padding-top: calc(var(--pixel-size) * 4);
+
+        color: #55ff55;
+        text-shadow: none;
+
+        &.challenge {
+            color: #aa00aa;
+        }
+    }
+
+    & > .criteria {
+        text-shadow: none;
+
+        padding: calc(var(--pixel-size) * 2);
+        padding-top: calc(var(--pixel-size) * 4);
+
+        // max height
+        max-height: 10.5em;
+        overflow-y: auto;
+
+        // hiding scrollbar
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+
+        // the Click For More...
+        font-style: italic;
+        color: #aaaaaa;
+
+        & > ul {
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+
+            font-style: normal;
+            color: #ffffff;
+
+            & > li {
+                text-indent: 0.375em;
+
+                &::before {
+                    content: "-";
+                }
+
+                &.done {
+                    color: #55ffff;
+                }
+            }
+        }
+    }
+}
+
+// added styling when the tooltip is inside an MCAdvancement
+// NOTE: z-indexing and positioning HERE
+.MCAdvancement {
+    // needs to be here since the advancement has an icon in with it
+    position: relative;
+
+    & > .MCAdvTooltip {
+        // cant use negative margin because we need z-indexing
+        position: absolute;
+        left: calc(var(--pixel-size) * -3);
+        top: calc(var(--pixel-size) * 3);
+
+        pointer-events: none;
+        visibility: hidden;
+        z-index: -1;
+
+        &.open {
+            // if its opened, it will allow moving of mouse onto it
+            pointer-events: all;
+        }
+    }
+
+    &:hover > .MCAdvTooltip {
+        visibility: visible;
+    }
+}

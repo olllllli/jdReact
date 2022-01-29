@@ -69,3 +69,24 @@ $sizes: (
         }
     }
 }
+
+// styling to allow the tooltips to work
+// NOTE: z-indexing and positioning HERE
+.MCAdvView > div {
+    pointer-events: none; // the positioning makes the select unclickable, do this
+    position: relative;
+    z-index: 0;
+
+    & > .lines {
+        z-index: -3; // behind the advancements still
+    }
+
+    & > .MCAdvancement {
+        pointer-events: all;
+        z-index: -2; // so tooltips go over other non-hovered advancemenets
+
+        &:hover {
+            z-index: unset;
+        }
+    }
+}
