@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "styles/routes/common.scss";
 import "styles/gui.scss";
 import written_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/written_book.png";
-import MCStatView from "components/MCStatView";
+import MCStatContainer from "components/MCStatContainer";
 
 const StatsPage: FunctionComponent<{}> = () => {
     return (
@@ -18,9 +18,7 @@ const StatsPage: FunctionComponent<{}> = () => {
                 </MCToast>
             </header>
             <main>
-                <div style={{ width: 450 }}>
-                    <MCStatView statName="minecraft:custom/minecraft:play_time" />
-                </div>
+                <MCStatContainer />
             </main>
         </>
     );
