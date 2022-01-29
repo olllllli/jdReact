@@ -15,27 +15,50 @@ type stateData = {
 
 // extracts a stat from the stats data, formatted by the given formatter or known formatter
 function extractStat(props: MCStatViewProps, data: statsData): number {
-    const [namespace, stat] = props.statName.split("/");
-    if (!namespace || !stat) {
-        return -1;
-    }
+    // determine whether simple or composite
+    if (props.type === "simple") {
+        // simple type
+        const [namespace, stat] = props.statName.split("/");
+        if (!namespace || !stat) {
+            return -1;
+        }
 
-    // extract the raw stat
-    const rawData = extractRawStat(namespace as statsNamespaces, stat, data);
-    if (!rawData) {
-        return -1;
-    }
+        // extract the raw stat
+        const rawData = extractRawStat(namespace as statsNamespaces, stat, data);
+        if (!rawData) {
+            return -1;
+        }
 
-    // TODO: format data checking if given in props
-    const formatted = formatStat(namespace as statsNamespaces, stat, rawData);
-    return formatted;
+        return formatStat(namespace as statsNamespaces, stat, rawData);
+
+    } else {
+        // composite type
+        // get each stats raw data
+        const rawDatas: number[] = [];
+        for (const statName of props.statNames) {
+            const [namespace, stat] = statName.split("/");
+            if (!namespace || !stat) {
+                rawDatas.push(-1);
+            }
+            rawDatas.push(extractRawStat(namespace as statsNamespaces, stat, data) ?? -1);
+        }
+
+        // return the formatted
+        return props.formatter(...rawDatas) ?? -1;
+    }
 }
 
 
 
 /* A component that displays all users for a specific stat */
+type StatNameFull = `${statsNamespaces}/${string}`;
 type MCStatViewProps = {
-    statName: `${statsNamespaces}/${string}`;
+    type: "simple";
+    statName: StatNameFull;
+} | {
+    type: "composite";
+    statNames: StatNameFull[];
+    formatter: (...args: number[]) => number;
 };
 
 const MCStatView: FunctionComponent<MCStatViewProps> = (props) => {

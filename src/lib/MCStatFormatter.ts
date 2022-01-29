@@ -9,11 +9,11 @@ type statFormattersType = {
 const statFormatters: statFormattersType = {
     "minecraft:custom": {
         "minecraft:play_time": (raw) => (raw / 72000),
-        "fly_one_cm": (raw) => (raw / 100 / 1000),
-        "walk_one_cm": (raw) => (raw / 100 / 1000),
-        "sprint_one_cm": (raw) => (raw / 100 / 1000),
-        "boat_one_cm": (raw) => (raw / 100 / 1000),
-        "minecart_one_cm": (raw) => (raw / 100 / 1000),
+        "minecraft:fly_one_cm": (raw) => (raw / 100 / 1000),
+        "minecraft:walk_one_cm": (raw) => (raw / 100 / 1000),
+        "minecraft:sprint_one_cm": (raw) => (raw / 100 / 1000),
+        "minecraft:boat_one_cm": (raw) => (raw / 100 / 1000),
+        "minecraft:minecart_one_cm": (raw) => (raw / 100 / 1000),
     },
     "minecraft:mined": {},
     "minecraft:broken": {},

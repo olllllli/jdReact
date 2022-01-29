@@ -39,6 +39,9 @@
         border-image: url("/img/gui/border_gui_inset.png") 1 fill;
         border-width: var(--pixel-size);
 
+        background-color: #373737;
+
+        min-height: calc(var(--pixel-size) * 32);
         max-height: calc(var(--pixel-size) * 128);
         overflow-y: auto;
 

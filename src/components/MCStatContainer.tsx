@@ -4,10 +4,29 @@ import { MCSelect } from "./MCSelect";
 import MCStatView from "./MCStatView";
 
 import "styles/components/MCStatContainer.scss";
+import trackedStats from "lib/MCStatTracked";
 
 /* The container for MCStatView-s */
 const MCStatContainer: FunctionComponent<{}> = () => {
     const [currentStat, setCurrentStat] = useState("playtime");
+
+    // generate the options
+    const options: React.ReactNode[] = [];
+    trackedStats.forEach((data, key) => {
+        options.push(
+            <MCOption value={key} onSelect={setCurrentStat} key={key}>{data.display}</MCOption>
+        );
+    });
+
+    // generate the view based on the current stat
+    const statInfo = trackedStats.get(currentStat)!;
+    let view;
+    if (statInfo.type === "simple") {
+        // a simple stat
+        view = <MCStatView type="simple" statName={statInfo.stat} />;
+    } else {
+        view = <MCStatView type="composite" statNames={statInfo.stats} formatter={statInfo.formatter} />;
+    }
 
     return (
         <div className="MCStatContainer">
@@ -17,13 +36,12 @@ const MCStatContainer: FunctionComponent<{}> = () => {
                 </span>
                 <div>
                     <MCSelect currentValue={currentStat}>
-                        <MCOption value="playtime" onSelect={setCurrentStat}>Time Played (hrs)</MCOption>
-                        <MCOption value="games_left" onSelect={setCurrentStat}>Times Exitted Server</MCOption>
+                        {options}
                     </MCSelect>
                 </div>
             </div>
             <div className="view">
-                <MCStatView statName="minecraft:custom/minecraft:play_time" />
+                {view}
             </div>
         </div>
     );

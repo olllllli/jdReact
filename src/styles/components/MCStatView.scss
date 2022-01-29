@@ -2,9 +2,6 @@
 @use "sass:map";
 
 .MCStatView {
-    // DEBUG:
-    min-height: 14em;
-
     &.loaded {
         display: flex;
         flex-direction: column;
