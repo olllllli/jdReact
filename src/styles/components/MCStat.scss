@@ -1,0 +1,35 @@
+@use "/src/styles/mccolors" as MC;
+@use "sass:map";
+
+.MCStat {
+    font-size: 1.5rem;
+    color: map.get(MC.$foreground, "white");
+    text-shadow: 0.1em 0.1em map.get(MC.$shadow, "white");
+
+    padding: calc(var(--pixel-size) * 2);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #4a4a4a;
+
+    & > .player {
+        // so many flex boxes wow
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: calc(var(--pixel-size) * 4);
+
+        & > .icon {
+            // if 0.1em is one pixel (shown by text-shadow)
+            // width: 0.8em;
+            // height: 0.8em;  want it abit bigger tho
+
+            width: calc(var(--pixel-size) * 8);
+            height: calc(var(--pixel-size) * 8);
+        }
+    }
+}
