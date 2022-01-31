@@ -8,7 +8,7 @@ type timestampFull = string;
 
 /* Response data types */
 type advancementNamespace = `minecraft:${AdvCategory}/${string}`;
-type advancementsData = { DataVersion: number } & {
+type advancementsData = { DataVersion: number; } & {
     [namespace: advancementNamespace]: {
         criteria: {
             [criterion: string]: timestampBasic;
@@ -25,9 +25,11 @@ type playerData = {
 };
 
 type statsNamespaces = `minecraft:${"broken" | "crafted" | "custom" | "dropped" | "killed" | "killed_by" | "mined" | "picked_up" | "used"}`;
-type statsData = { DataVersion: number } & {
-    [namespace in statsNamespaces]: {
-        [stat: string]: number;
+type statsData = { DataVersion: number; } & {
+    "stats": {
+        [namespace in statsNamespaces]: {
+            [stat: string]: number;
+        };
     };
 };
 
@@ -80,7 +82,7 @@ type AdvancementDetailsType = {
         [name: string]: {
             title: string;
             desc: string;
-            icon: { type: "item" | "block"; name: string; ench: boolean };
+            icon: { type: "item" | "block"; name: string; ench: boolean; };
             type: AdvType;
             criteria: string[];
         };

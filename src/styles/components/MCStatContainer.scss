@@ -1,0 +1,55 @@
+@use "/src/styles/mccolors" as MC;
+@use "sass:map";
+
+/* Mostly ripped from MCAdvContainer.scss */
+.MCStatContainer {
+    width: fit-content;
+    height: fit-content;
+    padding: calc(var(--pixel-size) * 2);
+
+    // set a min-width to the width of the largest category
+    min-width: calc(var(--pixel-size) * 128);
+
+    // outside border
+    border-image: url("/img/gui/border_gui.png") 2 fill;
+    border-width: calc(var(--pixel-size) * 2);
+    border-style: solid;
+
+    // header styling
+    & > .header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        // add some space below
+        margin-bottom: calc(var(--pixel-size) * 2);
+
+        & > span {
+            font-size: 1.5rem;
+            color: map.get(MC.$foreground, "white");
+            text-shadow: 0.1em 0.1em map.get(MC.$shadow, "white");
+            font-weight: bold;
+        }
+    }
+
+    // view styling
+    & > .view {
+        border-style: inset solid;
+        border-image: url("/img/gui/border_gui_inset.png") 1 fill;
+        border-width: var(--pixel-size);
+
+        background-color: #373737;
+
+        min-height: calc(var(--pixel-size) * 32);
+        max-height: calc(var(--pixel-size) * 128);
+        overflow-y: auto;
+
+        // hiding scrollbar
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+}

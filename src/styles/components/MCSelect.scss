@@ -1,6 +1,11 @@
 $scale: 1;
 
 .MCSelect {
+    // NOTE: z-indexing and positioning HERE
+    // done so its always ontop
+    position: relative;
+    z-index: 1;
+
     cursor: pointer;
     font-family: inherit;
     font-size: #{$scale}rem;
@@ -24,7 +29,7 @@ $scale: 1;
         border-image: url("/img/gui/border_select_open.png") 2 fill;
         border-width: calc(var(--pixel-size) * #{$scale});
 
-        max-height: calc(1.2em * 8);
+        max-height: calc(1.2em * 12);
 
         // hiding scrollbar
         &::-webkit-scrollbar {

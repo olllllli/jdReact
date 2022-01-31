@@ -213,4 +213,48 @@ export class CacheManager {
         await this.putLocalStorage(`stats:${uuid}`, APIData);
         return APIData;
     }
+
+    /* Returns a map of uuids to player data */
+    async getPlayerAll(): Promise<Map<uuid, playerData>> {
+        const uuids = await this.getUUIDs();
+        const mapping = new Map<uuid, playerData>();
+
+        // map setter
+        async function getData(cache: CacheManager, uuid: uuid) {
+            const data = await cache.getPlayer(uuid);
+            mapping.set(uuid, data);
+            return uuid;
+        }
+
+        // get all the player datas and add them to the mapping in parallel
+        await Promise.all(
+            uuids.map((uuid) => {
+                return getData(this, uuid);
+            })
+        );
+
+        return mapping;
+    }
+
+    /* Returns a map of uuids to stats data */
+    async getStatsAll(): Promise<Map<uuid, statsData>> {
+        const uuids = await this.getUUIDs();
+        const mapping = new Map<uuid, statsData>();
+
+        // map setter
+        async function getData(cache: CacheManager, uuid: uuid) {
+            const data = await cache.getStats(uuid);
+            mapping.set(uuid, data);
+            return uuid;
+        }
+
+        // get all the stats datas and add them to the mapping in parallel
+        await Promise.all(
+            uuids.map((uuid) => {
+                return getData(this, uuid);
+            })
+        );
+
+        return mapping;
+    }
 }
