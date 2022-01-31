@@ -2,7 +2,8 @@ import getSkin from "lib/getSkinImage";
 import React, { useEffect, useRef, useState } from "react";
 import { FunctionComponent } from "react";
 
-const offlineSkin = "img/gui/offline_skin.png";
+import offlineSkin from "img/gui/offline_skin.png";
+import missingTexture from "img/gui/missing_texture.png";
 
 /* Component for the face of a minecraft skin */
 // methodology inspired by the great work of `github/sunsetkookaburra`
@@ -12,7 +13,6 @@ interface MCHeadProps {
 }
 
 const MCHead: FunctionComponent<MCHeadProps> = (props) => {
-    console.log("new head");
     const [img, setImg] = useState<HTMLImageElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -20,17 +20,16 @@ const MCHead: FunctionComponent<MCHeadProps> = (props) => {
     useEffect(() => {
         async function getImg() {
             try {
-                // TODO: offline doesnt work
                 const url = props.data.offline ? offlineSkin : props.data.skin;
-                // const url = props.data.skin;
                 const skin = await getSkin(url);
                 setImg(skin);
-            } catch {
+            } catch (e) {
                 console.error(`MCHead: Could not get skin for ${props.data.username}`);
+                console.error(e);
             }
         }
         getImg();
-    }, []);
+    }, [props.data.offline, props.data.skin, props.data.username]);
 
     // draw onto the canvas
     useEffect(() => {
@@ -53,12 +52,12 @@ const MCHead: FunctionComponent<MCHeadProps> = (props) => {
 
             }
         }
-    }, [img]);
+    }, [img, props.layers]);
 
     // return the element
     if (!img) {
         return (
-            <div className="MCHead" style={{ width: 8, height: 8, backgroundColor: "red" }} />
+            <img className="MCHead" height={8} width={8} src={missingTexture} alt="missing" />
         );
     } else if (props.layers === "both") {
         return (
