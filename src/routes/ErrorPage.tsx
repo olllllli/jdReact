@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import "styles/routes/common.scss";
 import "styles/gui.scss";
-import barrier from "img/resourcepacks/vanilla/assets/minecraft/textures/item/barrier.png";
+import barrier from "img/gui/barrier.png";
 
 const ErrorPage: FunctionComponent<{}> = () => {
     return (

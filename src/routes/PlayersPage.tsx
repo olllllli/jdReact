@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import "styles/routes/common.scss";
 import "styles/gui.scss";
-import totem from "img/resourcepacks/vanilla/assets/minecraft/textures/item/totem_of_undying.png";
+import totem from "img/gui/totem_of_undying.png";
 
 const PlayersPage: FunctionComponent<{}> = () => {
     return (
