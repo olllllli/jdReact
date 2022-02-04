@@ -1,4 +1,6 @@
 import { ArcRotateCamera, Scene, StandardMaterial, Texture, Vector3, Plane as BABYLONPlane, MeshBuilder, Mesh, Vector4, Color3, DynamicTexture, Camera } from "@babylonjs/core";
+import { MCRenderParents } from "lib/MCRenderParents";
+import missingTexture from "img/gui/missing_texture.png";
 const directions: Direction[] = ["up", "down", "north", "south", "east", "west"];
 
 /* Namespace for functions relating to rendering minecraft models with babylonjs */
@@ -33,84 +35,6 @@ namespace MCRender {
         return camera;
     }
 
-    /* Create a new basic emmisive material with no lighting, will resolve regardless */
-    export async function basicMaterial(scene: Scene, src: string, name: string, shading: number = 1): Promise<StandardMaterial> {
-        return new Promise((resolve, reject) => {
-            const texture = new Texture(
-                src,
-                scene,
-                undefined,
-                undefined,
-                Texture.NEAREST_SAMPLINGMODE,
-                () => {
-                    const material = new StandardMaterial(name, scene);
-                    texture.level = shading;
-                    texture.hasAlpha = true;
-                    material.emissiveColor = new Color3(1, 1, 1);
-                    material.useAlphaFromDiffuseTexture = true;
-                    material.diffuseTexture = texture;
-                    material.backFaceCulling = true;
-                    material.disableLighting = true;
-
-                    resolve(material);
-                },
-                (msg, err) => {
-                    console.error("MCRender.basicMaterial:", msg, "\nSource:", src, "\nError:", err);
-                    const material = new StandardMaterial(name, scene);
-                    texture.level = shading;
-                    material.emissiveTexture = texture;
-                    material.disableLighting = true;
-
-                    resolve(material); // NOTE: could make this a reject
-                }
-            );
-        });
-    }
-
-    /* Resolves texture resource locations to materials. Expects texture variables that are not resolvable to be given */
-    export async function resolveMaterials(scene: Scene, data: ResourceData): Promise<TextureData<StandardMaterial>> {
-        const basePath = "/resourcepacks/vanilla/assets/minecraft/textures/";
-        const res: TextureData<StandardMaterial> = {};
-
-        const uniquePaths = new Map<`block/${string}`, StandardMaterial>();
-
-        // go through each of the ones with a path first
-        for (const textureVariable in data) {
-            const resource = data[textureVariable].replaceAll("minecraft:", "") as `block/${string}`;
-            if (resource.at(0) !== "#") {
-                // not a variable, create a material for it and add it to res
-                // check if its already gotten
-                if (!uniquePaths.has(resource)) {
-                    // resolve the basic material
-                    const material = await MCRender.basicMaterial(scene, `${basePath}${resource}.png`, resource);
-                    uniquePaths.set(resource, material);
-                }
-                res[textureVariable] = uniquePaths.get(resource)!;
-            }
-        }
-
-        // now resolve the variables until no more are resolvable
-        let variableResolved = true;
-        while (variableResolved) {
-            variableResolved = false;
-            for (const textureVariable in data) {
-                const resource = data[textureVariable].replaceAll("minecraft:", "");
-                if (!(textureVariable in res) && resource.at(0) === "#") {
-                    // check if its source is already gotten
-                    const source = resource.slice(1);
-                    if (source in res) {
-                        // copy it
-                        variableResolved = true;
-                        // console.log("setting", textureVariable, "to", source);
-                        res[textureVariable] = res[source];
-                    }
-                }
-            }
-        }
-
-        return res;
-    }
-
     /* Gets an image element from a src */
     export async function getImage(src: string): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {
@@ -124,13 +48,19 @@ namespace MCRender {
     }
 
     /* Resolves texture resource locations to Image Elements. Expects texture variables that are not resolvable to be given */
-    export async function resolveTextures(data: ResourceData): Promise<TextureData<HTMLImageElement | undefined>> {
+    export async function resolveTextures(data: ResourceData, knownTextureVariables?: TextureData<HTMLImageElement | undefined>): Promise<TextureData<HTMLImageElement | undefined>> {
         const basePath = "/resourcepacks/vanilla/assets/minecraft/textures/";
-        const res: TextureData<HTMLImageElement | undefined> = {};
         const uniqueImages = new Map<`block/${string}`, HTMLImageElement | undefined>();
+        // have the res already contain the known texture variables
+        const res: TextureData<HTMLImageElement | undefined> = knownTextureVariables ?? {};
 
         // go through each of the ones with a path first
         for (const textureVariable in data) {
+            // skip if this texture variable was already known and defined, this will allow overrides
+            if (textureVariable in res && res[textureVariable]) {
+                continue;
+            }
+
             const resourceLocation = data[textureVariable].replaceAll("minecraft:", "") as `block/${string}`;
             if (resourceLocation.at(0) !== "#") {
                 // not a variable, get the image and add it to res
@@ -139,7 +69,7 @@ namespace MCRender {
                         const image = await MCRender.getImage(`${basePath}${resourceLocation}.png`);
                         uniqueImages.set(resourceLocation, image);
                     } catch (err) {
-                        console.log(err);
+                        console.error(`MCRender.resolveTextures: Missing resource file ${basePath}${resourceLocation}.png`, err);
                         uniqueImages.set(resourceLocation, undefined);
                     }
                 }
@@ -154,7 +84,6 @@ namespace MCRender {
             for (const textureVariable in data) {
                 const resourceLocation = data[textureVariable].replaceAll("minecraft:", "");
                 if (!(textureVariable in res) && resourceLocation.at(0) === "#") {
-                    // check if its source is already gotten
                     const sourceTexture = resourceLocation.slice(1);
                     if (sourceTexture in res) {
                         variableResolved = true;
@@ -175,6 +104,15 @@ namespace MCRender {
         material.backFaceCulling = true;
         material.disableLighting = true;
         if (img === undefined) {
+            // just add a diffuse texture of missing texture
+            const texture = new Texture(
+                missingTexture,
+                scene,
+                undefined,
+                undefined,
+                Texture.NEAREST_SAMPLINGMODE
+            );
+            material.diffuseTexture = texture;
             return material;
         }
 
@@ -244,69 +182,6 @@ namespace MCRender {
 
     /* Model creation */
     export namespace Model {
-        /* Common Parent Models */
-        export namespace Parent {
-
-            /* Creates a cube given the side materials */
-            export function cube(scene: Scene, textures: SideData<HTMLImageElement | undefined>): SideData<Mesh> {
-                // build from block/cube data because this works really well
-                const elementData: ElementDataType = {
-                    "from": [0, 0, 0],
-                    "to": [16, 16, 16],
-                    "faces": {
-                        "down": { "texture": "#down", "cullface": "down" },
-                        "up": { "texture": "#up", "cullface": "up" },
-                        "north": { "texture": "#north", "cullface": "north" },
-                        "south": { "texture": "#south", "cullface": "south" },
-                        "west": { "texture": "#west", "cullface": "west" },
-                        "east": { "texture": "#east", "cullface": "east" }
-                    }
-                };
-                return MCRender.Model.fromElementData(scene, "cube", elementData, textures);
-            }
-
-            /* Creates a cube for orientable_vertical */
-            export function orientableVertical(scene: Scene, textures: OrientableVerticalData<HTMLImageElement | undefined>) {
-                return MCRender.Model.Parent.cube(scene, {
-                    up: textures.front,
-                    down: textures.side,
-                    north: textures.side,
-                    south: textures.side,
-                    east: textures.side,
-                    west: textures.side
-                });
-            }
-
-            /* Creates a cube for orientable_with_bottom */
-            export function orientableWithBottom(scene: Scene, textures: OrientableWithBottomData<HTMLImageElement | undefined>) {
-                return MCRender.Model.Parent.cube(scene, {
-                    up: textures.top,
-                    down: textures.bottom,
-                    north: textures.front,
-                    south: textures.side,
-                    east: textures.side,
-                    west: textures.side
-                });
-            }
-
-            /* Creates a cube for orientable */
-            export function orientable(scene: Scene, textures: OrientableData<HTMLImageElement | undefined>) {
-                return MCRender.Model.Parent.orientableWithBottom(scene, {
-                    top: textures.top,
-                    bottom: textures.top,
-                    front: textures.front,
-                    side: textures.side
-                });
-            }
-        }
-        // TODO: Implement more parent models and fill out the ones already implemented
-        const parents: { [parent: string]: (scene: Scene, sources: any) => SideData<Mesh>; } = {
-            "block/cube": MCRender.Model.Parent.cube,
-            "block/orientable": MCRender.Model.Parent.orientable,
-            "block/orientable_vertical": MCRender.Model.Parent.orientableVertical,
-            "block/orientable_with_bottom": MCRender.Model.Parent.orientableWithBottom,
-        };
-
         /* Shading levels for the sides of the cube */
         const shading: SideData<number> = {
             // wiki defined
@@ -320,7 +195,7 @@ namespace MCRender {
         };
 
         /* Creates a mesh from an element data */
-        export function fromElementData(scene: Scene, elementName: string, data: ElementDataType, textures: TextureData<HTMLImageElement | undefined>) {
+        export async function fromElementData(scene: Scene, elementName: string, data: ElementDataType, textures: TextureData<HTMLImageElement | undefined>): Promise<SideData<Mesh>> {
             // calcuate the planes dimensions
             const [x1, y1, z1] = data.from;
             const [x2, y2, z2] = data.to;
@@ -336,6 +211,7 @@ namespace MCRender {
 
             // create the planes
             const res: SideData<Mesh> = {};
+            const planes: Mesh[] = [];
             for (const side of directions) {
                 const face = data.faces[side];
                 // check if the face needs a plane
@@ -369,31 +245,60 @@ namespace MCRender {
                     mesh.material = material;
 
                     res[side] = mesh;
+                    planes.push(mesh);
                 }
             }
+
+            // await each side being rendered, this is so we can disable engine when we want to
+            // TODO: Maybe add a non async version
+            await Promise.all(
+                planes.map((plane) => {
+                    return new Promise((resolve) => {
+                        plane.onAfterRenderObservable.addOnce(() => {
+                            resolve(plane);
+                        });
+                    });
+                })
+            );
 
             return res;
         }
 
         /* Creates a mesh from model data */
-        export async function fromModelData(scene: Scene, data: BlockModelDataType) {
-            // check if elements is defined, if it is, ignore parent // NOTE: might be wrong
-            const trimmedParent = data.parent.replaceAll("minecraft:", "") as ResourceLocationTypeTrimmed;
-            if (data.elements && data.textures) {
-                const textures = await MCRender.resolveTextures(data.textures);
-                const sides = [];
+        export async function fromModelData(scene: Scene, data: BlockModelDataType, knownTextureVariables?: TextureData<HTMLImageElement | undefined>): Promise<SideData<Mesh>[]> {
+            if (data.elements) {
+                // render from element data
+                const textures = await MCRender.resolveTextures(data.textures ?? {}, knownTextureVariables);
+                // render each element
+                const planes = [];
                 let elementNumber = 0;
-                for (const element of data.elements.slice(0)) {
-                    sides.push(MCRender.Model.fromElementData(scene, String(elementNumber), element, textures));
+                for (const element of data.elements) {
+                    // TODO: Fix this await
+                    planes.push(await MCRender.Model.fromElementData(scene, String(elementNumber), element, textures));
                     elementNumber += 1;
                 }
-                return sides;
-            } else if (!data.elements && data.textures && (trimmedParent in parents)) {
-                const textures = await MCRender.resolveTextures(data.textures);
-                const planes = parents[trimmedParent](scene, textures);
-                return [planes];
+                return planes;
+
+            } else if (!data.elements && data.parent) {
+                // render from parent
+                const textures = await MCRender.resolveTextures(data.textures ?? {}, knownTextureVariables);
+                // get the parents translation function
+                const parentFunction = MCRenderParents.getParentFunction(data.parent);
+                if (parentFunction) {
+                    const planes = await parentFunction(scene, textures);
+                    return [planes];
+                } else {
+                    // parent is not hardcoded, try get its data from the model file and recursively call this
+                    console.info(`MCRender.Model.fromModelData: Unknown parent "${data.parent}", fetching model file.`);
+                    const trimmedParent = data.parent.replaceAll("minecraft:", "");
+                    const res = await fetch("/resourcepacks/vanilla/assets/minecraft/models/" + trimmedParent + ".json");
+                    const parentsData: BlockModelDataType = await res.json();
+                    return fromModelData(scene, parentsData, textures);
+                }
+
             } else {
-                console.error("MCRender.Model.fromModelData: Cannot build from model data.\n", data);
+                console.error("Cannot parse model data:", data);
+                throw new Error("MCRender.Model.fromModelData: Cannot build from model data.\n");
             }
         }
     }

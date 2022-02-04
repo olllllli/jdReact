@@ -138,6 +138,4 @@ type BlockModelDataType = {
 
 // parent datatypes
 type SideData<T> = { [side in Direction]?: T; };
-type OrientableVerticalData<T> = { side?: T; front?: T; };
-type OrientableData<T> = { top?: T; } & OrientableVerticalData<T>;
-type OrientableWithBottomData<T> = { bottom?: T; } & OrientableData<T>;
+// moved rest to MCRenderParents.ts
