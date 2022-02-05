@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "styles/routes/common.scss";
 import "styles/gui.scss";
 import totem from "img/gui/totem_of_undying.png";
-import MCItemNew from "components/MCItemNew";
+import MCItem from "components/MCItem";
 
 const PlayersPage: FunctionComponent<{}> = () => {
     return (
@@ -19,10 +19,11 @@ const PlayersPage: FunctionComponent<{}> = () => {
             </header>
             <main>
                 <style>
-                    {"canvas { width: 400px; height: 400px; margin: 0 auto; } div { width: 100% }"}
+                    {".MCItem { height: 64px; width: 64px } "}
                 </style>
                 <div>
-                    <MCItemNew />
+                    <MCItem type="item" name="iron_pickaxe" />
+                    <MCItem type="block" name="beacon" />
 
                 </div>
             </main>

@@ -1,9 +1,8 @@
-/* Returns an img element of the skin, or an error */
-
-async function getSkin(src: string): Promise<HTMLImageElement> {
+/* Gets an image element from a src */
+export async function getImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         src = src.replace("http://", "https://");
-        console.info("getSkin: Retrieving Skin");
+        console.info("getImage: Retrieving Image");
         const img = new Image();
         img.addEventListener("load", () => { resolve(img); });
         img.addEventListener("error", (e) => { reject(e); });
@@ -12,4 +11,4 @@ async function getSkin(src: string): Promise<HTMLImageElement> {
     });
 }
 
-export default getSkin; 
+export default getImage; 

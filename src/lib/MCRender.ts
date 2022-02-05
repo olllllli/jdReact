@@ -1,15 +1,19 @@
 import { ArcRotateCamera, Scene, StandardMaterial, Texture, Vector3, Plane as BABYLONPlane, MeshBuilder, Mesh, Vector4, Color3, DynamicTexture, Camera } from "@babylonjs/core";
 import { MCRenderParents } from "lib/MCRenderParents";
+import getImage from "lib/getImage";
+import { RESOURCEPACK } from "lib/globalConstants";
 import missingTexture from "img/gui/missing_texture.png";
 const directions: Direction[] = ["up", "down", "north", "south", "east", "west"];
+
+// TODO: Enchant glint
 
 /* Namespace for functions relating to rendering minecraft models with babylonjs */
 namespace MCRender {
     /* Setup the camera with the correct view */
     export function setupCamera(scene: Scene, ortho: boolean = true): ArcRotateCamera {
         // calcuate the values
-        const radius = 64;
-        const target = Vector3.ZeroReadOnly;
+        const radius = 32;
+        const target = new Vector3(8, 8, 8);
         const horizontalRotation = Math.PI / 4;
         const verticalRotation = Math.PI / 3; // the wiki to standardise 2:1
         // const verticalRotation = Math.atan(Math.sqrt(2)); // the real angle
@@ -17,7 +21,8 @@ namespace MCRender {
         // create camera
         const camera = new ArcRotateCamera("mainCamera", horizontalRotation, verticalRotation, radius, target, scene);
         if (ortho) {
-            const zoom = 16;
+            // const zoom = 4 * Math.PI; // not sure why but this is what i found to be correct
+            const zoom = 13; // more whole
             const engine = scene.getEngine();
             camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
             camera.orthoLeft = -zoom * engine.getScreenAspectRatio();
@@ -26,30 +31,30 @@ namespace MCRender {
             camera.orthoBottom = -zoom;
         }
 
-        // TODO: USE FRAMING BEHAVIOUR
-        // https://forum.babylonjs.com/t/set-the-cameras-viewport-to-fit-the-size-of-the-object/23500/4
-        // https://playground.babylonjs.com/#3TE6AD#3
-        // https://doc.babylonjs.com/divingDeeper/behaviors/cameraBehaviors#framing-behavior
-
-        camera.attachControl(); // DEBUG: Remove this
+        // camera.attachControl(); // DEBUG: Remove this
         return camera;
     }
 
-    /* Gets an image element from a src */
-    export async function getImage(src: string): Promise<HTMLImageElement> {
-        return new Promise((resolve, reject) => {
-            console.info("getImage: Retrieving Image");
-            const img = new Image();
-            img.addEventListener("load", () => { resolve(img); });
-            img.addEventListener("error", (e) => { reject(e); });
-            img.src = src;
-            // TODO: Figure out how and if i need to samesite=Strict
-        });
+    /* Gets model data for a block */
+    export async function getModelData(src: ResourceLocationType): Promise<BlockModelDataType | undefined> {
+        // TODO: deal with builtin/generated
+        const trimmedLocation = src.replaceAll("minecraft:", "");
+
+        console.info(`MCRender.getModelData: Getting model file "${src}".`);
+        const res = await fetch(RESOURCEPACK + "/models/" + trimmedLocation + ".json");
+        // TODO: make this more water tight
+        if (res.headers.get("content-type") && res.headers.get("content-type")!.includes("text/html")) {
+            console.error("MCRender.getModelData: Error getting", RESOURCEPACK + "/models/" + trimmedLocation + ".json");
+            return undefined;
+        }
+
+        const parentsData: BlockModelDataType = await res.json();
+        return parentsData;
     }
 
     /* Resolves texture resource locations to Image Elements. Expects texture variables that are not resolvable to be given */
     export async function resolveTextures(data: ResourceData, knownTextureVariables?: TextureData<HTMLImageElement | undefined>): Promise<TextureData<HTMLImageElement | undefined>> {
-        const basePath = "/resourcepacks/vanilla/assets/minecraft/textures/";
+        const basePath = RESOURCEPACK + "/textures/";
         const uniqueImages = new Map<`block/${string}`, HTMLImageElement | undefined>();
         // have the res already contain the known texture variables
         const res: TextureData<HTMLImageElement | undefined> = knownTextureVariables ?? {};
@@ -66,7 +71,7 @@ namespace MCRender {
                 // not a variable, get the image and add it to res
                 if (!uniqueImages.has(resourceLocation)) {
                     try {
-                        const image = await MCRender.getImage(`${basePath}${resourceLocation}.png`);
+                        const image = await getImage(`${basePath}${resourceLocation}.png`);
                         uniqueImages.set(resourceLocation, image);
                     } catch (err) {
                         console.error(`MCRender.resolveTextures: Missing resource file ${basePath}${resourceLocation}.png`, err);
@@ -289,11 +294,8 @@ namespace MCRender {
                     return [planes];
                 } else {
                     // parent is not hardcoded, try get its data from the model file and recursively call this
-                    console.info(`MCRender.Model.fromModelData: Unknown parent "${data.parent}", fetching model file.`);
-                    const trimmedParent = data.parent.replaceAll("minecraft:", "");
-                    const res = await fetch("/resourcepacks/vanilla/assets/minecraft/models/" + trimmedParent + ".json");
-                    const parentsData: BlockModelDataType = await res.json();
-                    return fromModelData(scene, parentsData, textures);
+                    const parentsData = await getModelData(data.parent);
+                    return parentsData ? fromModelData(scene, parentsData, textures) : [];
                 }
 
             } else {

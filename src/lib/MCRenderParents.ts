@@ -1,6 +1,7 @@
 import { Mesh, Scene } from "@babylonjs/core";
 import MCRender from "./MCRender";
 // TODO: I feel like this is a circular import
+// TODO: && false this, clear models and texture folder, and add back what is needed
 
 /* Common Parent Models */
 export namespace MCRenderParents {
