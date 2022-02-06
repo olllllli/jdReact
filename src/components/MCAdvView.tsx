@@ -67,7 +67,7 @@ const MCAdvView: FunctionComponent<MCAdvViewProps> = (props) => {
 
         // add the advancement
         advancements.push(
-            <MCAdvancement category={props.category} name={advName} style={{ gridArea: gridArea }} key={advName} criteriaData={advCriteriaData} done={advDone} />
+            <MCAdvancement category={props.category} name={advName} style={{ gridArea: gridArea }} key={advNamespace} criteriaData={advCriteriaData} done={advDone} />
         );
 
         // generate the lines from the advancement to its children

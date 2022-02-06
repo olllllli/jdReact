@@ -63,7 +63,7 @@ const advancementDetails: AdvancementDetailsType = {
     },
     adventure: {
         root: { title: "Adventure", desc: "Adventure, exploration and combat", icon: { type: "item", name: "map", ench: false }, type: "normal", criteria: ["killed_by_something", "killed_something"] },
-        voluntary_exile: { title: "Voluntary Exile", desc: "Kill a raid captain.\nMaybe consider staying away from villages for the time being...", icon: { type: "block", name: "ominous_banner", ench: false }, type: "normal", criteria: ["voluntary_exile"] },
+        voluntary_exile: { title: "Voluntary Exile", desc: "Kill a raid captain.\nMaybe consider staying away from villages for the time being...", icon: { type: "item", name: "ominous_banner", ench: false, custom: true }, type: "normal", criteria: ["voluntary_exile"] },
         spyglass_at_parrot: { title: "Is It a Bird?", desc: "Look at a parrot through a spyglass", icon: { type: "item", name: "spyglass", ench: false }, type: "normal", criteria: ["spyglass_at_parrot"] },
         kill_a_mob: {
             title: "Monster Hunter",
@@ -162,9 +162,9 @@ const advancementDetails: AdvancementDetailsType = {
         totem_of_undying: { title: "Postmortal", desc: "Use a Totem of Undying to cheat death", icon: { type: "item", name: "totem_of_undying", ench: false }, type: "goal", criteria: ["used_totem"] },
         summon_iron_golem: { title: "Hired Help", desc: "Summon an Iron Golem to help defend a village", icon: { type: "block", name: "carved_pumpkin", ench: false }, type: "goal", criteria: ["summoned_golem"] },
         trade_at_world_height: { title: "Star Trader", desc: "Trade with a villager at the build height limit", icon: { type: "item", name: "emerald", ench: false }, type: "normal", criteria: ["trade_at_world_height"] },
-        two_birds_one_arrow: { title: "Two Birds, One Arrow", desc: "Kill two Phantoms with a piercing arrow", icon: { type: "item", name: "crossbow", ench: false }, type: "challenge", criteria: ["two_birds"] },
-        whos_the_pillager_now: { title: "Who's the Pillager Now?", desc: "Give a Pillager a taste of their own medicine", icon: { type: "item", name: "crossbow", ench: false }, type: "normal", criteria: ["kill_pillager"] },
-        arbalistic: { title: "Arbalistic", desc: "Kill five unique mobs with one crossbow shot", icon: { type: "item", name: "crossbow", ench: false }, type: "challenge", criteria: ["arbalistic"] },
+        two_birds_one_arrow: { title: "Two Birds, One Arrow", desc: "Kill two Phantoms with a piercing arrow", icon: { type: "item", name: "crossbow_standby", ench: false }, type: "challenge", criteria: ["two_birds"] },
+        whos_the_pillager_now: { title: "Who's the Pillager Now?", desc: "Give a Pillager a taste of their own medicine", icon: { type: "item", name: "crossbow_standby", ench: false }, type: "normal", criteria: ["kill_pillager"] },
+        arbalistic: { title: "Arbalistic", desc: "Kill five unique mobs with one crossbow shot", icon: { type: "item", name: "crossbow_standby", ench: false }, type: "challenge", criteria: ["arbalistic"] },
         adventuring_time: {
             title: "Adventuring Time",
             desc: "Discover every biome",
