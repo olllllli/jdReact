@@ -19,11 +19,10 @@ const PlayersPage: FunctionComponent<{}> = () => {
             </header>
             <main>
                 <style>
-                    {".MCItem { height: 64px; width: 64px } "}
+                    {".MCItem { height: 256px; width: 256px } "}
                 </style>
                 <div>
-                    <MCItem type="item" name="iron_pickaxe" />
-                    <MCItem type="block" name="beacon" />
+                    <MCItem type="block" name="chest" custom />
 
                 </div>
             </main>

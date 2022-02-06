@@ -82,7 +82,7 @@ type AdvancementDetailsType = {
         [name: string]: {
             title: string;
             desc: string;
-            icon: { type: "item" | "block"; name: string; ench: boolean; };
+            icon: { type: "item" | "block"; name: string; ench: boolean; custom?: boolean; };
             type: AdvType;
             criteria: string[];
         };
@@ -107,8 +107,8 @@ type Direction = typeof directions[number];
 
 // TODO: only have known resource locations
 type ImageOrUndefined = HTMLImageElement | undefined;
-type ResourceLocationTypeTrimmed = `block/${string}`;
-type ResourceLocationType = `${"minecraft:" | ""}block/${"minecraft:" | ""}${string}`;
+type ResourceLocationTypeTrimmed = `block/${string}` | `custom/block/${string}`;
+type ResourceLocationType = `custom/block/${string}` | `${"minecraft:" | ""}block/${"minecraft:" | ""}${string}`;
 type TextureVariableType = `#${string}`;
 type TextureData<T> = { [textureVariable: string]: T; };
 type ResourceData = TextureData<ResourceLocationType | TextureVariableType>;

@@ -6,6 +6,7 @@ import missingTexture from "img/gui/missing_texture.png";
 const directions: Direction[] = ["up", "down", "north", "south", "east", "west"];
 
 // TODO: Enchant glint
+// TODO: implement element rotation
 
 /* Namespace for functions relating to rendering minecraft models with babylonjs */
 namespace MCRender {
@@ -31,7 +32,7 @@ namespace MCRender {
             camera.orthoBottom = -zoom;
         }
 
-        // camera.attachControl(); // DEBUG: Remove this
+        camera.attachControl(); // DEBUG: Remove this
         return camera;
     }
 
@@ -208,10 +209,10 @@ namespace MCRender {
             const planeDimensions: SideData<{ c: Vector3, h: number, w: number; }> = {
                 up: { h: Math.abs(x2 - x1), w: Math.abs(z2 - z1), c: MCRender.Vectors.midPoint(new Vector3(x1, y2, z1), new Vector3(x2, y2, z2)) },
                 down: { h: Math.abs(x2 - x1), w: Math.abs(z2 - z1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z1), new Vector3(x2, y1, z2)) },
-                north: { h: Math.abs(y2 - y1), w: Math.abs(z2 - z1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z2), new Vector3(x2, y2, z2)) },
-                south: { h: Math.abs(y2 - y1), w: Math.abs(z2 - z1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z1), new Vector3(x2, y2, z1)) },
-                east: { h: Math.abs(y2 - y1), w: Math.abs(x2 - x1), c: MCRender.Vectors.midPoint(new Vector3(x2, y1, z1), new Vector3(x2, y2, z2)) },
-                west: { h: Math.abs(y2 - y1), w: Math.abs(x2 - x1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z1), new Vector3(x1, y2, z2)) },
+                north: { h: Math.abs(y2 - y1), w: Math.abs(x2 - x1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z2), new Vector3(x2, y2, z2)) },
+                south: { h: Math.abs(y2 - y1), w: Math.abs(x2 - x1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z1), new Vector3(x2, y2, z1)) },
+                east: { h: Math.abs(y2 - y1), w: Math.abs(z2 - z1), c: MCRender.Vectors.midPoint(new Vector3(x2, y1, z1), new Vector3(x2, y2, z2)) },
+                west: { h: Math.abs(y2 - y1), w: Math.abs(z2 - z1), c: MCRender.Vectors.midPoint(new Vector3(x1, y1, z1), new Vector3(x1, y2, z2)) },
             };
 
             // create the planes

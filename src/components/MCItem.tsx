@@ -11,6 +11,7 @@ interface MCItemProps {
     type: "item" | "block";
     name: string;
     enchanted?: boolean;
+    custom?: boolean; // whether its using a custom model/generated image file
 }
 
 // TODO: Enchant glint
@@ -25,8 +26,11 @@ async function onSceneReady(props: MCItemProps, scene: BABYLON.Scene) {
     engine.setHardwareScalingLevel(0.1);
 
     // get the block model data
-    const blockLocation = "block/" + props.name as ResourceLocationType;
+    const blockLocation = (props.custom ? "custom/" : "") + "block/" + props.name as ResourceLocationType;
     const modelData = await MCRender.getModelData(blockLocation);
+    console.log(props);
+    console.log(blockLocation);
+    console.log(modelData);
 
     // render the block, only if it was actually gotten
     if (modelData) {
@@ -34,14 +38,14 @@ async function onSceneReady(props: MCItemProps, scene: BABYLON.Scene) {
     }
 
     // disable the engine
-    engine.stopRenderLoop();
-    engine.dispose();
+    // engine.stopRenderLoop();
+    // engine.dispose();
 }
 
 const MCItem: FunctionComponent<MCItemProps> = (props) => {
     if (props.type === "item") {
         // an item, just use an img tag
-        const path = RESOURCEPACK + "/textures/item/" + props.name + ".png";
+        const path = RESOURCEPACK + "/textures/" + (props.custom ? "custom/" : "") + "item/" + props.name + ".png";
         return (
             <div className="MCItem">
                 <img src={path} alt={"item/" + props.name + ".png"} />
