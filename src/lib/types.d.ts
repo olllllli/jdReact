@@ -106,6 +106,7 @@ const directions = ["up", "down", "north", "south", "east", "west"] as const;
 type Direction = typeof directions[number];
 
 // TODO: only have known resource locations
+type ImageOrUndefined = HTMLImageElement | undefined;
 type ResourceLocationTypeTrimmed = `block/${string}`;
 type ResourceLocationType = `${"minecraft:" | ""}block/${"minecraft:" | ""}${string}`;
 type TextureVariableType = `#${string}`;

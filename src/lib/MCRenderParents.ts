@@ -10,15 +10,15 @@ export namespace MCRenderParents {
         const trimmedParent = parent.replaceAll("minecraft:", "");
         if (trimmedParent in MCRenderParents.parents) {
             // already a hard coded parent
-            return MCRenderParents.parents[parent];
+            return MCRenderParents.parents[trimmedParent];
         }
 
         // unknown parent
         return null;
     }
 
-    /* Creates a cube given the side materials */
-    export function cube(scene: Scene, textures: SideData<HTMLImageElement | undefined>): Promise<SideData<Mesh>> {
+    /* The inbuilt translation methods to save on fetches for parent model files */
+    export function cube(scene: Scene, textures: SideData<ImageOrUndefined>): Promise<SideData<Mesh>> {
         // build from block/cube data because this works really well
         const elementData: ElementDataType = {
             "from": [0, 0, 0],
@@ -35,10 +35,42 @@ export namespace MCRenderParents {
         return MCRender.Model.fromElementData(scene, "cube", elementData, textures);
     }
 
-    /* The translation methods */
-    export function orientableVertical(scene: Scene, textures: OrientableVerticalData<HTMLImageElement | undefined>) {
+    export function cubeAll(scene: Scene, textures: CubeAllData<ImageOrUndefined>) {
         return MCRenderParents.cube(scene, {
-            up: textures.front,
+            up: textures.all,
+            down: textures.all,
+            north: textures.all,
+            south: textures.all,
+            east: textures.all,
+            west: textures.all
+        });
+    }
+
+    export function cubeBottomTop(scene: Scene, textures: CubeBottomTopData<ImageOrUndefined>) {
+        return MCRenderParents.cube(scene, {
+            up: textures.top,
+            down: textures.bottom,
+            north: textures.side,
+            south: textures.side,
+            east: textures.side,
+            west: textures.side
+        });
+    }
+
+    export function cubeColumn(scene: Scene, textures: CubeColumnData<ImageOrUndefined>) {
+        return MCRenderParents.cube(scene, {
+            up: textures.end,
+            down: textures.end,
+            north: textures.side,
+            south: textures.side,
+            east: textures.side,
+            west: textures.side
+        });
+    }
+
+    export function cubeTop(scene: Scene, textures: CubeTopData<ImageOrUndefined>) {
+        return MCRenderParents.cube(scene, {
+            up: textures.top,
             down: textures.side,
             north: textures.side,
             south: textures.side,
@@ -47,7 +79,7 @@ export namespace MCRenderParents {
         });
     }
 
-    export function orientableWithBottom(scene: Scene, textures: OrientableWithBottomData<HTMLImageElement | undefined>) {
+    export function orientableWithBottom(scene: Scene, textures: OrientableWithBottomData<ImageOrUndefined>) {
         return MCRenderParents.cube(scene, {
             up: textures.top,
             down: textures.bottom,
@@ -58,7 +90,7 @@ export namespace MCRenderParents {
         });
     }
 
-    export function orientable(scene: Scene, textures: OrientableData<HTMLImageElement | undefined>) {
+    export function orientable(scene: Scene, textures: OrientableData<ImageOrUndefined>) {
         return MCRenderParents.orientableWithBottom(scene, {
             top: textures.top,
             bottom: textures.top,
@@ -71,15 +103,21 @@ export namespace MCRenderParents {
     // TODO: Figure out how to type this properly
     export const parents: { [parent: string]: ParentFunctionType; } = {
         "block/cube": MCRenderParents.cube,
+        "block/cube_all": MCRenderParents.cubeAll,
+        "block/cube_bottom_top": MCRenderParents.cubeBottomTop,
+        "block/cube_column": MCRenderParents.cubeColumn,
+        "block/cube_top": MCRenderParents.cubeTop,
         "block/orientable": MCRenderParents.orientable,
-        "block/orientable_vertical": MCRenderParents.orientableVertical,
         "block/orientable_with_bottom": MCRenderParents.orientableWithBottom,
     };
 }
 
 type ParentFunctionType = (scene: Scene, textures: {}) => Promise<SideData<Mesh>>;
-type OrientableVerticalData<T> = { side?: T; front?: T; };
-type OrientableData<T> = { top?: T; } & OrientableVerticalData<T>;
-type OrientableWithBottomData<T> = { bottom?: T; } & OrientableData<T>;
+type CubeAllData<T> = { all?: T; };
+type CubeBottomTopData<T> = { bottom?: T; top?: T; side?: T; };
+type CubeColumnData<T> = { end?: T; side?: T; };
+type CubeTopData<T> = { side?: T; top?: T; };
+type OrientableData<T> = { top?: T; side?: T; front?: T; };
+type OrientableWithBottomData<T> = { bottom?: T; top?: T; side?: T; front?: T; };
 
 export default MCRenderParents;

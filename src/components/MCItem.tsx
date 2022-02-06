@@ -14,6 +14,7 @@ interface MCItemProps {
 }
 
 // TODO: Enchant glint
+// TODO: Use canvas isntead of img so we can get layers
 
 async function onSceneReady(props: MCItemProps, scene: BABYLON.Scene) {
     // setup the scene and camera

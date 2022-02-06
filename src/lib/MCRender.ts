@@ -53,11 +53,11 @@ namespace MCRender {
     }
 
     /* Resolves texture resource locations to Image Elements. Expects texture variables that are not resolvable to be given */
-    export async function resolveTextures(data: ResourceData, knownTextureVariables?: TextureData<HTMLImageElement | undefined>): Promise<TextureData<HTMLImageElement | undefined>> {
+    export async function resolveTextures(data: ResourceData, knownTextureVariables?: TextureData<ImageOrUndefined>): Promise<TextureData<ImageOrUndefined>> {
         const basePath = RESOURCEPACK + "/textures/";
-        const uniqueImages = new Map<`block/${string}`, HTMLImageElement | undefined>();
+        const uniqueImages = new Map<`block/${string}`, ImageOrUndefined>();
         // have the res already contain the known texture variables
-        const res: TextureData<HTMLImageElement | undefined> = knownTextureVariables ?? {};
+        const res: TextureData<ImageOrUndefined> = knownTextureVariables ?? {};
 
         // go through each of the ones with a path first
         for (const textureVariable in data) {
@@ -102,7 +102,7 @@ namespace MCRender {
     }
 
     /* Creates a material containing a dynamic texture, given the image and the uv */
-    export function dynamicMaterial(scene: Scene, name: string, img: HTMLImageElement | undefined, uv: Vector4, w: number, h: number, shading: number = 1): StandardMaterial {
+    export function dynamicMaterial(scene: Scene, name: string, img: ImageOrUndefined, uv: Vector4, w: number, h: number, shading: number = 1): StandardMaterial {
         // create the material, and return early if the img is undefined
         const material = new StandardMaterial(name, scene);
         material.emissiveColor = new Color3(1, 1, 1);
@@ -200,7 +200,7 @@ namespace MCRender {
         };
 
         /* Creates a mesh from an element data */
-        export async function fromElementData(scene: Scene, elementName: string, data: ElementDataType, textures: TextureData<HTMLImageElement | undefined>): Promise<SideData<Mesh>> {
+        export async function fromElementData(scene: Scene, elementName: string, data: ElementDataType, textures: TextureData<ImageOrUndefined>): Promise<SideData<Mesh>> {
             // calcuate the planes dimensions
             const [x1, y1, z1] = data.from;
             const [x2, y2, z2] = data.to;
@@ -270,7 +270,7 @@ namespace MCRender {
         }
 
         /* Creates a mesh from model data */
-        export async function fromModelData(scene: Scene, data: BlockModelDataType, knownTextureVariables?: TextureData<HTMLImageElement | undefined>): Promise<SideData<Mesh>[]> {
+        export async function fromModelData(scene: Scene, data: BlockModelDataType, knownTextureVariables?: TextureData<ImageOrUndefined>): Promise<SideData<Mesh>[]> {
             if (data.elements) {
                 // render from element data
                 const textures = await MCRender.resolveTextures(data.textures ?? {}, knownTextureVariables);
