@@ -16,6 +16,7 @@ interface MCItemProps {
 
 // TODO: Enchant glint
 // TODO: Use canvas isntead of img so we can get layers
+// TODO: Increase the wither skeletonskull size 1.5 without making him look drunk
 
 async function onSceneReady(props: MCItemProps, scene: BABYLON.Scene) {
     // setup the scene and camera
