@@ -3,9 +3,9 @@ import { FunctionComponent } from "react";
 
 import "styles/routes/LandingPage.scss";
 
-import knowledge_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/knowledge_book.png";
-import totem from "img/resourcepacks/vanilla/assets/minecraft/textures/item/totem_of_undying.png";
-import written_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/written_book.png";
+import knowledge_book from "img/gui/knowledge_book.png";
+import totem from "img/gui/totem_of_undying.png";
+import written_book from "img/gui/written_book.png";
 
 const LandingPage: FunctionComponent<{}> = () => {
     return (

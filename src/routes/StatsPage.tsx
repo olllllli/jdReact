@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import "styles/routes/common.scss";
 import "styles/gui.scss";
-import written_book from "img/resourcepacks/vanilla/assets/minecraft/textures/item/written_book.png";
+import written_book from "img/gui/written_book.png";
 import MCStatContainer from "components/MCStatContainer";
 
 const StatsPage: FunctionComponent<{}> = () => {

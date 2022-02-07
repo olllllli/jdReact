@@ -1,4 +1,4 @@
-import getSkin from "lib/getSkinImage";
+import getImage from "lib/getImage";
 import React, { useEffect, useRef, useState } from "react";
 import { FunctionComponent } from "react";
 
@@ -21,7 +21,7 @@ const MCHead: FunctionComponent<MCHeadProps> = (props) => {
         async function getImg() {
             try {
                 const url = props.data.offline ? offlineSkin : props.data.skin;
-                const skin = await getSkin(url);
+                const skin = await getImage(url);
                 setImg(skin);
             } catch (e) {
                 console.error(`MCHead: Could not get skin for ${props.data.username}`);

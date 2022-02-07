@@ -82,7 +82,7 @@ type AdvancementDetailsType = {
         [name: string]: {
             title: string;
             desc: string;
-            icon: { type: "item" | "block"; name: string; ench: boolean; };
+            icon: { type: "item" | "block"; name: string; ench: boolean; custom?: boolean; };
             type: AdvType;
             criteria: string[];
         };
@@ -98,3 +98,45 @@ type AdvancementLayoutType = {
         };
     };
 };
+
+/**
+ * TYPES RELEVANT TO MCRENDER
+ */
+const directions = ["up", "down", "north", "south", "east", "west"] as const;
+type Direction = typeof directions[number];
+
+// TODO: only have known resource locations
+type ImageOrUndefined = HTMLImageElement | undefined;
+type ResourceLocationTypeTrimmed = `block/${string}` | `custom/block/${string}`;
+type ResourceLocationType = `custom/block/${string}` | `${"minecraft:" | ""}block/${"minecraft:" | ""}${string}`;
+type TextureVariableType = `#${string}`;
+type TextureData<T> = { [textureVariable: string]: T; };
+type ResourceData = TextureData<ResourceLocationType | TextureVariableType>;
+type FaceDataType = {
+    texture: TextureVariableType;
+    uv?: [number, number, number, number];
+    cullface?: Direction; // "bottom may also be used in the latest versions instead of down, despite appearing only once." wtf
+    rotation?: 0 | 90 | 180 | 270;
+    tintindex?: number; // wild times we live in
+};
+
+type ElementDataType = {
+    from: [number, number, number];
+    to: [number, number, number];
+    faces: SideData<FaceDataType>;
+    rotation?: unknown; // TODO: Type this
+    shade?: boolean; // default true
+};
+
+// https://minecraft.fandom.com/wiki/Model#Block_models
+type BlockModelDataType = {
+    parent: ResourceLocationType; // should be defined on everything except from `block/block`
+    ambientocclusion?: boolean; // default true // NOTE: actually use this
+    display?: unknown; // NOTE: use this if certain things are wrong rotation
+    textures?: ResourceData; // NOTE: Could type this better 
+    elements?: ElementDataType[];
+};
+
+// parent datatypes
+type SideData<T> = { [side in Direction]?: T; };
+// moved rest to MCRenderParents.ts
