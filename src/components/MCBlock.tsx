@@ -12,7 +12,6 @@ interface MCBlockProps {
 }
 
 // TODO: Enchant glint
-// TODO: Increase the wither skeletonskull size 1.5 without making him look drunk
 
 async function onSceneReady(props: MCBlockProps, scene: BABYLON.Scene) {
     // setup the scene and camera

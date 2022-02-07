@@ -68,7 +68,7 @@ const MCAdvancement: FunctionComponent<MCAdvancementProps> = (props) => {
     const details = advancementDetails[props.category][props.name];
     const icon = ((details.icon.type === "item") ?
         <MCItem name={details.icon.name} enchanted={details.icon.ench} custom={details.icon.custom} /> :
-        <MCBlock name={details.icon.name} enchanted={details.icon.ench} custom={details.icon.custom} />
+        <MCBlock name={details.icon.name} custom={details.icon.custom} />
     );
     return (
         <div className={classes + details.type} style={props.style} onClick={() => setTooltipOpened(!tooltipOpened)} onMouseLeave={() => setTooltipOpened(false)}>

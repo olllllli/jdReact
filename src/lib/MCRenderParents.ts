@@ -1,7 +1,6 @@
 import { Mesh, Scene } from "@babylonjs/core";
 import MCRender from "./MCRender";
 // TODO: I feel like this is a circular import
-// TODO: && false this, clear models and texture folder, and add back what is needed
 
 /* Common Parent Models */
 export namespace MCRenderParents {
@@ -112,7 +111,7 @@ export namespace MCRenderParents {
     };
 }
 
-type ParentFunctionType = (scene: Scene, textures: {}) => Promise<SideData<Mesh>>;
+type ParentFunctionType = (scene: Scene, textures: any) => Promise<SideData<Mesh>>;
 type CubeAllData<T> = { all?: T; };
 type CubeBottomTopData<T> = { bottom?: T; top?: T; side?: T; };
 type CubeColumnData<T> = { end?: T; side?: T; };

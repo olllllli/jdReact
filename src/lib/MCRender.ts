@@ -1,12 +1,10 @@
-import { ArcRotateCamera, Scene, StandardMaterial, Texture, Vector3, Plane as BABYLONPlane, MeshBuilder, Mesh, Vector4, Color3, DynamicTexture, Camera } from "@babylonjs/core";
+import { ArcRotateCamera, Scene, StandardMaterial, Texture, Vector3, Plane as BABYLONPlane, MeshBuilder, Mesh, Vector4, Color3, DynamicTexture, Camera, Space, Angle } from "@babylonjs/core";
 import { MCRenderParents } from "lib/MCRenderParents";
 import getImage from "lib/getImage";
+// import LCM from "lib/LCM";
 import { RESOURCEPACK } from "lib/globalConstants";
 import missingTexture from "img/gui/missing_texture.png";
 const directions: Direction[] = ["up", "down", "north", "south", "east", "west"];
-
-// TODO: Enchant glint
-// TODO: implement element rotation
 
 /* Namespace for functions relating to rendering minecraft models with babylonjs */
 namespace MCRender {
@@ -32,7 +30,7 @@ namespace MCRender {
             camera.orthoBottom = -zoom;
         }
 
-        camera.attachControl(); // DEBUG: Remove this
+        // camera.attachControl(); // DEBUG: Remove this
         return camera;
     }
 
@@ -122,15 +120,6 @@ namespace MCRender {
             return material;
         }
 
-        // create the dynamic texture
-        const texture = new DynamicTexture(
-            `${name}_texture`,
-            { height: h, width: w },
-            scene,
-            false,
-            Texture.NEAREST_SAMPLINGMODE
-        );
-
         // get the sizes and orientation
         const sx = Math.min(uv.x, uv.z);
         const sy = Math.min(uv.y, uv.w);
@@ -138,11 +127,23 @@ namespace MCRender {
         const sh = Math.abs(uv.w - uv.y);
         const xInvert = Math.sign(uv.z - uv.x) ?? 1;
         const yInvert = Math.sign(uv.w - uv.y) ?? 1;
+        // the pixel scaling to allow for decimal pixels if size!=uv (ie in wither_skeleton_skull)
+        const pixelsPerPixel = 4; // Math.max(LCM(sw, w) / w, LCM(sh, h) / h); // TODO: Make this async lol
+
+        // create the dynamic texture
+        const texture = new DynamicTexture(
+            `${name}_texture`,
+            { height: h * pixelsPerPixel, width: w * pixelsPerPixel },
+            scene,
+            false,
+            Texture.NEAREST_SAMPLINGMODE
+        );
 
         // draw the image on
         const ctx = texture.getContext();
+        ctx.imageSmoothingEnabled = false;
         ctx.scale(1 * xInvert, 1 * yInvert);
-        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, w * xInvert, h * yInvert);
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, w * xInvert * pixelsPerPixel, h * yInvert * pixelsPerPixel);
         texture.update();
 
         texture.hasAlpha = true;
@@ -250,6 +251,11 @@ namespace MCRender {
                     );
                     mesh.material = material;
 
+                    // rotate the mesh if needed
+                    if (face.rotation) {
+                        mesh.rotate(MCRender.Vectors[side], Angle.FromDegrees(face.rotation).radians(), Space.WORLD);
+                    }
+
                     res[side] = mesh;
                     planes.push(mesh);
                 }
@@ -279,8 +285,8 @@ namespace MCRender {
                 const planes = [];
                 let elementNumber = 0;
                 for (const element of data.elements) {
-                    // TODO: Fix this await
-                    planes.push(await MCRender.Model.fromElementData(scene, String(elementNumber), element, textures));
+                    const elementPlanes = await MCRender.Model.fromElementData(scene, String(elementNumber), element, textures);
+                    planes.push(elementPlanes);
                     elementNumber += 1;
                 }
                 return planes;
