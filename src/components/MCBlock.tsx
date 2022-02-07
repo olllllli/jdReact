@@ -8,7 +8,6 @@ import React from "react";
 
 interface MCBlockProps {
     name: string;
-    enchanted?: boolean;
     custom?: boolean; // whether its using a custom model file
 }
 
@@ -46,4 +45,4 @@ const MCBlock: FunctionComponent<MCBlockProps> = (props) => {
 };
 
 // TODO: Figure out how to memoize this
-export default React.memo(MCBlock, (prev, next) => { return (prev.name === next.name) && (prev.custom === next.custom) && (prev.enchanted === next.enchanted); });
+export default React.memo(MCBlock, (prev, next) => { return (prev.name === next.name) && (prev.custom === next.custom); });

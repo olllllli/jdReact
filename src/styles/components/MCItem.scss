@@ -2,8 +2,55 @@
     width: 100%;
     height: 100%;
 
-    & > img {
+    & > .img {
         width: 100%;
         height: 100%;
+
+        background-repeat: no-repeat;
+        background-size: 100%;
+
+        & > .enchant {
+            width: 100%;
+            height: 100%;
+
+            mask-size: cover;
+            mix-blend-mode: screen;
+
+            // transform: rotate(10deg); // cannot have because rotates mask
+            background-image: url("/img/enchanted_item_glint.png");
+            background-size: 800%;
+
+            // since 8x the size, 4s * 8 = 32s
+            animation: 32s linear infinite enchantGlint;
+        }
     }
 }
+
+@keyframes enchantGlint {
+    from {
+        background-position: 0% 0%;
+    }
+    to {
+        background-position: -100% 800%;
+    }
+}
+
+/*
+10 degrees rotation to the left
+
+078: 1358 908 | 
+090: 1366 830 | 12: +8 -78 | 13.3/s 130/s
+101: 1374 758 | 11: +8 -72 | 14.5/s 131/s
+112: 1381 686 | 11: +7 -72 | 12.7/s 131/s
+123: 1388 614 | 11: +7 -72 | 12.7/s 131/s
+134: 1396 542 | 11: +8 -72 | 14.5/s 131/s
+
+y = 9.69122X - 14069.42323
+degrees roughly 84.1085843
+
+~130 to 131 pixels up per second (avg 130.8)
+~12.7 to 14.5 pixels right per second (avg 13.54)
+~3.75 screen pixels -> 1 ingame pixel
+~35/3.6 = m = 9.7
+noticable skew though, going to simplify it to 8/1 gradient at 32 pixels per second
+*/
