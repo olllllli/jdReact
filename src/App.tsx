@@ -8,6 +8,7 @@ import StatsPage from "routes/StatsPage";
 import ErrorPage from "routes/ErrorPage";
 import LoadingPage from "routes/LoadingPage";
 import { cache } from "index";
+import PlayerSearchPage from "routes/PlayerSearchPage";
 
 console.log("App Loading");
 
@@ -32,7 +33,8 @@ const App: FunctionComponent<{}> = () => {
                 <Route path="/" element={<LandingPage />} />
 
                 <Route path="/advancements" element={<AdvPage />} />
-                <Route path="/players" element={<PlayersPage />} />
+                <Route path="/players" element={<PlayerSearchPage />} />
+                <Route path="/players/:uuid" element={<PlayersPage />} />
                 <Route path="/stats" element={<StatsPage />} />
             </Routes>
         );

@@ -1,0 +1,104 @@
+@use "/src/styles/mccolors" as MC;
+@use "sass:map";
+
+/* Mostly ripped from MCAdvContainer.scss */
+.MCPlayerCardContainer {
+    width: calc(var(--pixel-size) * 200);
+    height: calc(var(--pixel-size) * 100);
+    padding: calc(var(--pixel-size) * 2);
+
+    // outside border
+    border-image: url("/img/gui/border_gui.png") 2 fill;
+    border-width: calc(var(--pixel-size) * 2);
+    border-style: solid;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: calc(var(--pixel-size) * 2);
+
+    // player view styling
+    & > .player {
+        flex: 0.4;
+
+        border-style: inset solid;
+        border-image: url("/img/gui/border_gui_inset.png") 1 fill;
+        border-width: var(--pixel-size);
+    }
+
+    // details styling
+    & > .details {
+        flex: 0.6;
+        padding: calc(var(--pixel-size) * 2);
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: calc(var(--pixel-size) * 4);
+
+        & h2 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: bold;
+            color: map.get(MC.$foreground, "white");
+            text-shadow: 0.1em 0.1em map.get(MC.$shadow, "white");
+        }
+
+        & h3 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: normal;
+            color: map.get(MC.$foreground, "white");
+            text-shadow: 0.1em 0.1em map.get(MC.$shadow, "white");
+        }
+
+        & span {
+            &.uuid {
+                font-size: 1rem;
+                font-weight: normal;
+                color: map.get(MC.$foreground, "darkGray");
+                // text-shadow: 0.1em 0.1em map.get(MC.$shadow, "darkGray");
+                text-shadow: none;
+            }
+
+            &.joindate {
+                font-size: 1.5rem;
+                font-weight: normal;
+                color: map.get(MC.$foreground, "blue");
+                text-shadow: 0.1em 0.1em map.get(MC.$shadow, "blue");
+            }
+        }
+
+        & > .advancements {
+            & > span {
+                font-size: 1.5rem;
+                font-weight: normal;
+
+                &.story {
+                    color: map.get(MC.$foreground, "green");
+                    text-shadow: 0.1em 0.1em map.get(MC.$shadow, "green");
+                }
+
+                &.nether {
+                    color: map.get(MC.$foreground, "red");
+                    text-shadow: 0.1em 0.1em map.get(MC.$shadow, "red");
+                }
+
+                &.end {
+                    color: map.get(MC.$foreground, "lightPurple");
+                    text-shadow: 0.1em 0.1em map.get(MC.$shadow, "lightPurple");
+                }
+
+                &.adventure {
+                    color: map.get(MC.$foreground, "aqua");
+                    text-shadow: 0.1em 0.1em map.get(MC.$shadow, "aqua");
+                }
+
+                &.husbandry {
+                    color: map.get(MC.$foreground, "yellow");
+                    text-shadow: 0.1em 0.1em map.get(MC.$shadow, "yellow");
+                }
+            }
+        }
+    }
+}
