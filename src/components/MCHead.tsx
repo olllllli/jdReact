@@ -12,6 +12,7 @@ interface MCHeadProps {
     data: playerData;
 }
 
+// TODO: overlay isnt 25% larger, its 8.5pixels in size
 const MCHead: FunctionComponent<MCHeadProps> = (props) => {
     const [img, setImg] = useState<HTMLImageElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);

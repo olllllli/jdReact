@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Scene, StandardMaterial, Texture, Vector3, Plane as BABYLONPlane, MeshBuilder, Mesh, Vector4, Color3, DynamicTexture, Camera, Space, Angle } from "@babylonjs/core";
+import { ArcRotateCamera, Scene, StandardMaterial, Texture, Vector3, Plane as BABYLONPlane, MeshBuilder, Mesh, Vector4, Color3, DynamicTexture, Camera, Space, Angle, VertexBuffer } from "@babylonjs/core";
 import { MCRenderParents } from "lib/MCRenderParents";
 import getImage from "lib/getImage";
 // import LCM from "lib/LCM";
@@ -6,6 +6,7 @@ import { RESOURCEPACK } from "lib/globalConstants";
 import missingTexture from "img/gui/missing_texture.png";
 const directions: Direction[] = ["up", "down", "north", "south", "east", "west"];
 
+// TODO: fix rotation so it uses wrot instead of rotating the mesh
 /* Namespace for functions relating to rendering minecraft models with babylonjs */
 namespace MCRender {
     /* Setup the camera with the correct view */
@@ -127,8 +128,8 @@ namespace MCRender {
         const sh = Math.abs(uv.w - uv.y);
         const xInvert = Math.sign(uv.z - uv.x) ?? 1;
         const yInvert = Math.sign(uv.w - uv.y) ?? 1;
-        // the pixel scaling to allow for decimal pixels if size!=uv (ie in wither_skeleton_skull)
-        const pixelsPerPixel = 4; // Math.max(LCM(sw, w) / w, LCM(sh, h) / h); // TODO: Make this async lol
+        // the pixel scaling to allow for decimal pixels if size!=uv (ie in wither_skeleton_skull) (smallest is 32th on body)
+        const pixelsPerPixel = 32; // Math.max(LCM(sw, w) / w, LCM(sh, h) / h); // TODO: Make this async lol
 
         // create the dynamic texture
         const texture = new DynamicTexture(
@@ -147,6 +148,8 @@ namespace MCRender {
         texture.update();
 
         texture.hasAlpha = true;
+        // texture.wRotationCenter = (w * pixelsPerPixel) / 2;
+        // texture.wAng = Math.PI * 0.5;
         texture.level = shading;
         material.diffuseTexture = texture;
         material.useAlphaFromDiffuseTexture = true;
@@ -179,10 +182,14 @@ namespace MCRender {
     /* Plane creation */
     export namespace Plane {
         /* Creates a plane given a facing, center, height and width */
-        export function fromCenterAndDimensions(scene: Scene, name: string, facing: Vector3, center: Vector3, w: number, h: number): Mesh {
+        export function fromCenterAndDimensions(scene: Scene, name: string, facing: Vector3, center: Vector3, w: number, h: number, faceuvs?: number[]): Mesh {
             const abs = BABYLONPlane.FromPositionAndNormal(center, facing);
-            const plane = MeshBuilder.CreatePlane(name, { sourcePlane: abs, height: h, width: w }, scene);
+            const plane = MeshBuilder.CreatePlane(name, { sourcePlane: abs, height: h, width: w, updatable: true }, scene);
             plane.position = center;
+            // rotate uvs if face uvs set
+            if (faceuvs) {
+                plane.updateVerticesData(VertexBuffer.UVKind, faceuvs);
+            }
             return plane;
         }
     }
@@ -248,6 +255,7 @@ namespace MCRender {
                         planeDimensions[side]!.c,
                         planeDimensions[side]!.w,
                         planeDimensions[side]!.h,
+                        (side === "up") ? [0, 1, 0, 0, 1, 0, 1, 1] : ((side === "down") ? [1, 1, 1, 0, 0, 0, 0, 1,] : undefined)
                     );
                     mesh.material = material;
 

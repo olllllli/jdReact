@@ -1,8 +1,9 @@
 import getAdvancementCounts from "lib/getAdvancementCounts";
 import getJoinDate from "lib/getJoinDate";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 
 import "styles/components/MCPlayerCardContainer.scss";
+import MCPlayerModel from "./MCPlayerModel";
 
 function twoDigits(n: number): string {
     return `${n <= 9 ? "0" : ""}${n}`;
@@ -33,7 +34,7 @@ const MCPlayerCardContainer: FunctionComponent<MCPlayerCardContainerProps> = (pr
     return (
         <div className="MCPlayerCardContainer">
             <div className="player">
-
+                <MCPlayerModel data={props.player} uuid={props.uuid} />
             </div>
             <div className="details">
                 <div>

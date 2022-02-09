@@ -126,6 +126,7 @@ type ElementDataType = {
     faces: SideData<FaceDataType>;
     rotation?: unknown; // TODO: Type this
     shade?: boolean; // default true
+    __comment?: string;
 };
 
 // https://minecraft.fandom.com/wiki/Model#Block_models
@@ -140,3 +141,8 @@ type BlockModelDataType = {
 // parent datatypes
 type SideData<T> = { [side in Direction]?: T; };
 // moved rest to MCRenderParents.ts
+
+// player model data type
+type PlayerModelType = {
+    elements: ElementDataType[];
+};
