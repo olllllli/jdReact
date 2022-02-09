@@ -34,20 +34,23 @@ async function onSceneReady(props: MCPlayerModelProps, scene: Scene) {
     const skin = await getImage(props.data.offline ? offlineSkin : "https://crafatar.com/skins/" + props.uuid);
     let model: PlayerModelType;
     if (skin.height === 32) {
+        console.log("Model: steve/legacy");
         model = modelSteveLegacy;
     } else {
-        // check bottom right pixel // TODO: this isnt really thorough
+        // check pixel to right of left arm texture // TODO: this isnt really thorough
         const canvas = document.createElement("canvas");
         canvas.width = 1;
         canvas.height = 1;
         const ctx = canvas.getContext("2d")!;
-        ctx.drawImage(skin, 63, 63, 1, 1, 0, 0, 1, 1);
+        ctx.drawImage(skin, 47, 63, 1, 1, 0, 0, 1, 1);
         const pixel = ctx.getImageData(0, 0, 1, 1).data;
 
         // if nothing there, then its alex model
         if (pixel.filter(v => (v !== 0)).length === 0) {
+            console.log("Model: alex");
             model = modelAlex;
         } else {
+            console.log("Model: steve/current");
             model = modelSteveCurrent;
         }
     }
